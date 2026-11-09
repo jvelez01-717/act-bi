@@ -3,19 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observatorio de Permanencia | Actividad Final</title>
+    <title>Observatorio de Permanencia | Universidad Andina del Norte</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('btnScrollTop');
-            if (!btn) return;
-            if (window.scrollY > 350) {
-                btn.classList.remove('opacity-0', 'pointer-events-none');
-                btn.classList.add('opacity-100');
-            } else {
-                btn.classList.remove('opacity-100');
-                btn.classList.add('opacity-0', 'pointer-events-none');
+            if (btn) {
+                if (window.scrollY > 350) {
+                    btn.classList.remove('opacity-0', 'pointer-events-none');
+                    btn.classList.add('opacity-100');
+                } else {
+                    btn.classList.remove('opacity-100');
+                    btn.classList.add('opacity-0', 'pointer-events-none');
+                }
             }
+
+            const prog = document.getElementById('scrollProgressBar');
+            const totalH = document.documentElement.scrollHeight - window.innerHeight;
+            if (prog && totalH > 0) {
+                prog.style.width = Math.min(100, Math.max(0, (window.scrollY / totalH) * 100)) + '%';
+            }
+
+            const sections = ['reto1', 'reto2', 'reto3', 'reto4', 'reto5', 'reto6', 'apa'];
+            const scrollPos = window.scrollY + 140;
+            let current = 'reto1';
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const el = document.getElementById(sections[i]);
+                if (el && el.offsetTop <= scrollPos) {
+                    current = sections[i];
+                    break;
+                }
+            }
+            document.querySelectorAll('#navMenu a').forEach(a => {
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('bg-teal-800', 'text-white', 'shadow-xs');
+                    a.classList.remove('text-slate-700', 'hover:bg-teal-800', 'hover:text-white', 'bg-teal-50', 'text-teal-800');
+                } else {
+                    a.classList.remove('bg-teal-800', 'text-white', 'shadow-xs');
+                    a.classList.add('text-slate-700', 'hover:bg-teal-800', 'hover:text-white');
+                }
+            });
         });
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +52,7 @@
         .gradient-header { background: linear-gradient(135deg, #0f172a 0%, #115e59 100%); }
     
         @media print {
-            nav, #btnScrollTop, .no-print { display: none !important; }
+            nav, #btnScrollTop, #scrollProgressBar, .no-print { display: none !important; }
             body { background: #ffffff !important; color: #0f172a !important; }
             section { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 2rem !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
             tr { page-break-inside: avoid !important; break-inside: avoid !important; }
@@ -36,10 +63,13 @@
 <script src="/_aistudio-iframe.js?v=1f94f900"></script></head>
 <body class="bg-slate-50 text-slate-800">
 
+    <!-- BARRA DE PROGRESO DE LECTURA (0 A 100%) -->
+    <div id="scrollProgressBar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-teal-500 via-teal-400 to-emerald-400 z-50 transition-all duration-150 pointer-events-none no-print" style="width: 0%"></div>
+
     <!-- BANNER LEY 1581 -->
     <div class="bg-amber-50/90 border-b border-amber-200/80 text-amber-950 px-4 py-2.5 text-xs md:text-sm text-center font-medium shadow-xs">
         <span class="inline-flex items-center justify-center bg-amber-200/70 text-amber-900 text-[11px] font-bold px-2 py-0.5 rounded-sm mr-2 uppercase tracking-wide">Privacidad &amp; Seguridad</span>
-        🔒 <strong>Protección de datos y cumplimiento de la Ley 1581 de 2012:</strong>  Los datos presentados son simulados, no corresponden a registros reales ni representan la situación real de la institución. Fueron utilizados exclusivamente con fines educativos y académicos. En concordancia con la Ley 1581 de 2012, sobre protección de datos personales, no se exponen nombres, documentos de identidad ni correos electrónicos de personas reales.
+        🔒 <strong>Protección de datos y cumplimiento de la Ley 1581 de 2012:</strong> Los datos presentados son simulados, no corresponden a registros reales ni representan la situación real de la institución. Fueron utilizados exclusivamente con fines educativos y académicos. En concordancia con la Ley 1581 de 2012, sobre protección de datos personales, no se exponen nombres, documentos de identidad ni correos electrónicos de personas reales.
     </div>
 
     <!-- ENCABEZADO -->
@@ -47,20 +77,21 @@
         <div class="max-w-6xl mx-auto">
             <span class="bg-teal-500/20 border border-teal-400/50 text-teal-200 text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-widest inline-block shadow-xs">Actividad Final</span>
             <h1 class="text-3xl md:text-5xl font-extrabold mt-4 tracking-tight text-white drop-shadow-xs">Observatorio de Permanencia Estudiantil</h1>
-            <p class="text-slate-300 mt-3 max-w-3xl mx-auto text-sm md:text-base leading-relaxed font-normal">Arquitectura Lakehouse, Modelo Dimensional en Estrella, Tablero BI de Autoservicio y Sistema Optimizado de Alerta Temprana</p>
+            <p class="text-slate-300 mt-3 max-w-3xl mx-auto text-sm md:text-base leading-relaxed font-normal">Arquitectura Lakehouse, Modelo Dimensional en Estrella, Tablero BI de Autoservicio y Sistema Optimizado de Alerta Temprana · Cohorte 2025-1</p>
         </div>
     </header>
 
-    <!-- NAVEGACIÓN STICKY -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-xs border-b border-slate-200/80 px-4 py-2.5">
-        <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-1.5 text-xs md:text-sm font-semibold">
-            <a href="#reto1" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 1 · ETL</a>
-            <a href="#reto2" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 2 · Modelo Estrella</a>
-            <a href="#reto3" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 3 · Arquitectura</a>
-            <a href="#reto4" class="px-3.5 py-1.5 rounded-lg bg-teal-50 text-teal-800 border border-teal-200/60 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 4 · Tablero BI</a>
-            <a href="#reto5" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 5 · Alerta Temprana</a>
-            <a href="#reto6" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 6 · Prospectiva</a>
-            <a href="#apa" class="px-3.5 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Referencias</a>
+    <!-- NAVEGACIÓN STICKY CON SCROLLSPY Y BOTÓN DE IMPRESIÓN -->
+    <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-xs border-b border-slate-200/80 px-4 py-2.5 no-print">
+        <div id="navMenu" class="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-1.5 text-xs md:text-sm font-semibold">
+            <a href="#reto1" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 1 · ETL</a>
+            <a href="#reto2" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 2 · Modelo Estrella</a>
+            <a href="#reto3" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 3 · Arquitectura</a>
+            <a href="#reto4" class="px-3 py-1.5 rounded-lg bg-teal-800 text-white shadow-xs transition-all duration-200">Reto 4 · Tablero BI</a>
+            <a href="#reto5" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 5 · Alerta Temprana</a>
+            <a href="#reto6" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Reto 6 · Prospectiva</a>
+            <a href="#apa" class="px-3 py-1.5 rounded-lg text-slate-700 hover:bg-teal-800 hover:text-white transition-all duration-200">Referencias</a>
+          
         </div>
     </nav>
 
@@ -572,9 +603,80 @@
                             <p class="text-[11px] text-emerald-700">63 / 175 (Meta ≥ 35%)</p>
                         </div>
                     </div>
-                    <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                    <p class="text-xs md:text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200">
                         <strong>Impacto Operativo:</strong> Mientras la regla anterior desbordaba a Bienestar con 370 casos (249 falsos positivos, es decir 67,3 % de las alertas), la nueva regla utiliza el <strong>97,5% de la capacidad de los consejeros (117 de 120 cupos)</strong> y eleva la precisión del 32,7 % al <strong>53,8%</strong>, asegurando que más de la mitad de las llamadas intervengan a desertores reales.
                     </p>
+                </div>
+            </div>
+
+            <!-- CUADRO COMPARATIVO VISUAL ANTES VS DESPUÉS -->
+            <div class="mt-6 bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 rounded-xl p-5 text-white shadow-md border border-slate-700">
+                <h3 class="font-bold text-sm md:text-base text-teal-300 mb-1 flex items-center gap-2">
+                    ⚖️ Cuadro Comparativo de Impacto: Regla Anterior vs. Regla Nueva Optimizada
+                </h3>
+                <p class="text-xs text-slate-300 mb-4">
+                    Síntesis de rendimiento sobre la cohorte total de 1.200 estudiantes (175 desertores reales · Capacidad Bienestar: 120 cupos)
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <!-- Regla Anterior -->
+                    <div class="bg-slate-800/90 rounded-lg p-4 border border-rose-500/40">
+                        <div class="flex items-center justify-between border-b border-rose-500/30 pb-2 mb-3">
+                            <span class="font-bold text-rose-300 uppercase tracking-wide">Regla Anterior (S4/S8)</span>
+                            <span class="bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded text-[10px] font-bold">Inoperable</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Casos Alertados:</span>
+                                <span class="font-bold font-mono text-rose-300 text-sm">370 casos</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Carga Bienestar:</span>
+                                <span class="font-semibold text-rose-300">308 % (Desborda 250 cupos) 🔴</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Falsos Positivos (Llamadas inútiles):</span>
+                                <span class="font-bold font-mono text-rose-300 text-sm">249 (67,3 %) 🔴</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Precisión Operativa:</span>
+                                <span class="font-bold font-mono text-amber-300 text-sm">32,7 % (Meta ≥ 50%) 🔴</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-300">Cobertura:</span>
+                                <span class="font-bold font-mono text-slate-300 text-sm">69,1 % (121 / 175)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nueva Regla -->
+                    <div class="bg-teal-950/70 rounded-lg p-4 border border-emerald-500/50">
+                        <div class="flex items-center justify-between border-b border-emerald-500/30 pb-2 mb-3">
+                            <span class="font-bold text-emerald-300 uppercase tracking-wide">Nueva Regla Optimizada (S1–8)</span>
+                            <span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-bold">100% Viable</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Casos Alertados:</span>
+                                <span class="font-bold font-mono text-emerald-300 text-sm">117 casos (≤ 120) 🟢</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Carga Bienestar:</span>
+                                <span class="font-semibold text-emerald-300">97,5 % (Sostenible) 🟢</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Falsos Positivos (Llamadas inútiles):</span>
+                                <span class="font-bold font-mono text-emerald-300 text-sm">54 (-78 % errores) 🟢</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-700">
+                                <span class="text-slate-300">Precisión Operativa:</span>
+                                <span class="font-bold font-mono text-emerald-300 text-sm">53,8 % (+21,1 pp · Meta ≥ 50%) 🟢</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-300">Cobertura:</span>
+                                <span class="font-bold font-mono text-emerald-300 text-sm">36,0 % (Meta ≥ 35% cumplida) 🟢</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -713,7 +815,11 @@ function recalcularTablero() {
     listaProgramas.sort((a, b) => b.v - a.v);
     listaProgramas.forEach((item, idx) => {
         const rank = idx + 1;
-        cont.innerHTML += `<div class="p-2 rounded-lg hover:bg-slate-50 transition-colors">
+        const metaDes = META.des;
+        const diff = item.v > metaDes
+            ? `⚠️ +${((item.v - metaDes) * 100).toFixed(1)} pp sobre meta máx (15%)`
+            : `✅ Cumple meta de retención (≤ 15%)`;
+        cont.innerHTML += `<div class="group relative p-2.5 rounded-lg hover:bg-slate-100/90 transition-all border border-transparent hover:border-slate-200">
             <div class="flex justify-between items-center font-medium mb-1.5">
                 <span class="flex items-center gap-2">
                     <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center justify-center font-mono">#${rank}</span>
@@ -725,9 +831,16 @@ function recalcularTablero() {
             <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden shadow-inner">
                 <div class="${item.v > META.des ? 'bg-amber-500' : 'bg-teal-600'} h-3.5 rounded-full transition-all duration-500 shadow-xs" style="width:${Math.min(100, item.v * 100 * 4)}%"></div>
             </div>
+            <div class="hidden group-hover:block absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 z-30 bg-slate-900 text-white text-[11px] rounded-lg py-2 px-3 shadow-xl border border-slate-700 w-64 pointer-events-none">
+                <p class="font-bold text-teal-300">${item.p}</p>
+                <p class="mt-0.5 text-slate-200">Tasa de Deserción: <strong>${pc(item.v)}</strong></p>
+                <p class="text-slate-300">Detalle: ${item.d} desertores de ${item.n} matriculados</p>
+                <p class="mt-1 font-semibold ${item.v > metaDes ? 'text-amber-300' : 'text-emerald-300'}">${diff}</p>
+            </div>
         </div>`;
     });
 }
+
 
 function resetFiltros() {
     document.getElementById('fFacultad').value = 'TODAS';
