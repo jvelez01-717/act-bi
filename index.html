@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio de Permanencia | Universidad Andina del Norte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .gradient-header { background: linear-gradient(135deg, #0f172a 0%, #115e59 100%); }
+    </style>
+<script src="/_aistudio-iframe.js?v=1f94f900"></script></head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- BANNER LEY 1581 -->
+    <div class="bg-amber-100 border-b border-amber-300 text-amber-900 px-4 py-2 text-xs md:text-sm text-center font-medium">
+        🔒 <strong>Cumplimiento Ley 1581 de 2012 (Protección de Datos Sensibles):</strong> Los registros de Bienestar Universitario fueron anonimizados. No se expone ningún nombre, documento ni correo electrónico.
+    </div>
+
+    <!-- ENCABEZADO -->
+    <header class="gradient-header text-white py-10 px-6 text-center border-b-4 border-teal-500">
+        <div class="max-w-6xl mx-auto">
+            <span class="bg-teal-600/40 border border-teal-400 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Actividad Final</span>
+            <h1 class="text-3xl md:text-4xl font-bold mt-3 tracking-tight">Observatorio de Permanencia Estudiantil</h1>
+            <p class="text-slate-300 mt-2 max-w-2xl mx-auto text-sm md:text-base">Arquitectura Lakehouse, Modelo Dimensional en Estrella, Tablero BI de Autoservicio y Sistema Optimizado de Alerta Temprana · Cohorte 2025-1</p>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN STICKY -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-2 text-xs md:text-sm font-semibold">
+            <a href="#reto1" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Reto 1 · ETL</a>
+            <a href="#reto2" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Reto 2 · Modelo Estrella</a>
+            <a href="#reto3" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Reto 3 · Arquitectura</a>
+            <a href="#reto4" class="px-3 py-1.5 rounded-lg bg-teal-50 text-teal-800 hover:bg-teal-700 hover:text-white transition">Reto 4 · Tablero BI</a>
+            <a href="#reto5" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Reto 5 · Alerta Temprana</a>
+            <a href="#reto6" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Reto 6 · Prospectiva</a>
+            <a href="#apa" class="px-3 py-1.5 rounded-lg hover:bg-teal-700 hover:text-white transition">Referencias</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+
+        <!-- RETO 1: ETL -->
+        <section id="reto1" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-5">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">Reto 1 · Proceso ETL Repetible y Auditable</h2>
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">1.200 Estudiantes Verificados</span>
+            </div>
+            <p class="text-sm text-slate-600 mb-4">Flujo construido en Power Query (Lenguaje M) sobre los 5 archivos CSV originales. Para <code>bienestar_registros_2025_1.csv</code> se ejecutó cruce compuesto por <code>nombre_completo</code> + <code>programa</code> homologado contra Admisiones, resolviendo homónimos y eliminando información clínica sensible.</p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
+                            <th class="p-3">#</th>
+                            <th class="p-3">Problema en Datos Brutos</th>
+                            <th class="p-3">Regla de Transformación Aplicada (Power Query)</th>
+                            <th class="p-3">Etapa ETL</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr><td class="p-3 font-bold">1</td><td class="p-3"><code>sis_matriculas</code>: 17 filas duplicadas exactas (12 en 2025-1).</td><td class="p-3"><code>Table.Distinct</code> por llave compuesta (<code>documento</code> + <code>periodo</code>).</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Depuración</span></td></tr>
+                        <tr><td class="p-3 font-bold">2</td><td class="p-3"><code>sis_matriculas</code>: 29 cédulas con puntos en periodo 2025-2.</td><td class="p-3"><code>Table.ReplaceValue</code> reemplazando <code>"."</code> por cadena vacía <code>""</code>.</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Limpieza</span></td></tr>
+                        <tr><td class="p-3 font-bold">3</td><td class="p-3"><code>sis_matriculas</code>: 7 registros con formato romano <code>2025-II</code>.</td><td class="p-3">Sustitución canónica de <code>2025-II</code> por <code>2025-2</code>.</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Estandarización</span></td></tr>
+                        <tr><td class="p-3 font-bold">4</td><td class="p-3"><code>sis_matriculas</code>: Siglas dispersas en nombres de programa.</td><td class="p-3">Mapeo a los 6 nombres oficiales (ej. <code>ING. INFORMATICA</code> &rarr; <code>Ingeniería Informática</code>).</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Homologación</span></td></tr>
+                        <tr><td class="p-3 font-bold">5</td><td class="p-3"><code>sis_matriculas</code>: Comas decimales y 13 promedios fuera de escala (&gt; 5,0).</td><td class="p-3">Conversión regional y regla condicional: si <code>promedio &gt; 5.0</code> dividir entre <code>10</code>.</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Validación</span></td></tr>
+                        <tr><td class="p-3 font-bold">6</td><td class="p-3"><code>admisiones</code>: 30 aspirantes duplicados por variación de mayúsculas.</td><td class="p-3"><code>Text.Upper</code> + <code>Text.Trim</code> en nombres y deduplicación por <code>documento</code> (1.450 únicos).</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Unicidad</span></td></tr>
+                        <tr><td class="p-3 font-bold">7</td><td class="p-3"><code>erp_pagos</code>: Estados de pago con grafía mixta y espacios.</td><td class="p-3">Transformación a mayúsculas y recorte en <code>estado_pago</code> y limpieza de puntos en cédula.</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Normalización</span></td></tr>
+                        <tr><td class="p-3 font-bold">8</td><td class="p-3"><code>bienestar</code>: Sin cédula, siglas en programa y homónimos.</td><td class="p-3">Homologación de programa y <code>Table.NestedJoin</code> por <code>nombre_completo</code> + <code>programa</code>.</td><td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded">Integración</span></td></tr>
+                        <tr><td class="p-3 font-bold">9</td><td class="p-3"><code>bienestar</code>: Columna <code>observacion</code> con datos médicos (Ley 1581).</td><td class="p-3"><code>Table.RemoveColumns</code> de <code>nombre_completo</code> y <code>observacion</code> + ocultación de PII.</td><td class="p-3"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">Anonimización</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-4">
+                <button onclick="descargarCohorteCSV()" class="bg-teal-700 hover:bg-teal-800 text-white font-semibold px-5 py-2.5 rounded-lg text-sm shadow transition flex items-center gap-2">
+                    📥 Descargar Tabla Limpia de la Cohorte (1.200 filas · CSV Anonimizado)
+                </button>
+                <span class="text-xs text-slate-500">Nota: Si deseas enlazar tu Google Drive, reemplaza el atributo <code>href</code> por el enlace de tu carpeta.</span>
+            </div>
+        </section>
+
+        <!-- RETO 2: MODELO DIMENSIONAL -->
+        <section id="reto2" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-5">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">Reto 2 · Diseño del Modelo Dimensional (Esquema Estrella)</h2>
+                <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full">1 Hechos · 4 Dimensiones</span>
+            </div>
+
+            <div class="bg-slate-50 border-l-4 border-teal-600 p-4 rounded-r-lg mb-6">
+                <p class="text-sm font-semibold text-slate-900">Granularidad en una oración:</p>
+                <p class="text-sm text-slate-700 italic">“Una fila por cada estudiante único de la cohorte 2025-1 evaluado en su desempeño inicial y su estado de continuidad en el periodo 2025-2.”</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6 text-sm">
+                <div class="border border-slate-200 rounded-lg p-4">
+                    <h3 class="font-bold text-teal-800 mb-2">Tabla de Hechos Central: <code>Fact_Cohorte_2025_1</code></h3>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li><strong>Medidas Aditivas:</strong> <code>creditos</code> (sumable a través de cualquier dimensión) y conteos de estudiantes/desertores.</li>
+                        <li><strong>Medidas NO Aditivas (Calculadas con DAX):</strong> <code>promedio_limpio</code> (3,38), <code>Tasa_Absorcion</code> (82,8%), <code>Tasa_Retencion</code> (85,4%), <code>Tasa_Desercion</code> (14,6%), <code>Precision</code> y <code>Cobertura</code>. No pueden sumarse directamente; requieren agregación de razón o promedio.</li>
+                    </ul>
+                </div>
+                <div class="border border-slate-200 rounded-lg p-4">
+                    <h3 class="font-bold text-teal-800 mb-2">4 Dimensiones Conectadas (Filtro Único / Estrella)</h3>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                        <li><strong><code>Dim_Estudiante</code> (1:1):</strong> Filtra por <code>facultad</code>, <code>programa</code>, <code>estrato</code>, <code>tipo_colegio</code> y <code>puntaje_saber11</code>.</li>
+                        <li><strong><code>Dim_Finanzas</code> (1:*):</strong> Filtra por <code>estado_pago</code> y <code>valor_liquidado</code> en 2025-2.</li>
+                        <li><strong><code>Dim_Bienestar</code> (*:1):</strong> Filtra por <code>tipo_registro</code> y <code>fecha</code> de intervención (sin PII).</li>
+                        <li><strong><code>Dim_Moodle_Alertas</code> (1:*):</strong> Aporta <code>nota_s48_prom</code>, <code>acc_s78_sum</code>, <code>acc_w1_8</code> y <code>nota_w1_8</code>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- DIAGRAMA DE LA VISTA DE MODELO -->
+            <div class="bg-slate-100 border border-slate-300 rounded-lg p-4 text-center">
+                <p class="text-xs font-semibold text-slate-500 uppercase mb-3">Vista de Modelo creado en Power BI Desktop (Identificadores PII Ocultos).</p>
+                <!-- Si guardas tu captura como modelo_estrella.png en la misma carpeta, se mostrará automáticamente -->
+                <img id="imgModeloReal" src="modelo_estrella.png" alt="Captura Vista de Modelo Power BI" class="max-w-full mx-auto rounded shadow-sm mb-3 hidden" onload="this.classList.remove('hidden')">
+
+                <!-- Diagrama SVG fiel a la vista de Power BI (se muestra siempre como respaldo interactivo) -->
+                <div class="overflow-x-auto">
+                    <svg width="780" height="340" viewBox="0 0 780 340" class="mx-auto bg-white rounded border border-slate-200">
+                        <!-- Dim_Estudiante -->
+                        <rect x="20" y="20" width="200" height="125" rx="6" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+                        <rect x="20" y="20" width="200" height="26" rx="6" fill="#e2e8f0"/>
+                        <text x="120" y="37" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">Dim_Estudiante</text>
+                        <text x="32" y="62" font-size="10" fill="#94a3b8">🚫 documento (oculto)</text>
+                        <text x="32" y="78" font-size="10" fill="#334155">estrato | facultad | programa</text>
+                        <text x="32" y="94" font-size="10" fill="#94a3b8">🚫 nombre_completo (oculto)</text>
+                        <text x="32" y="110" font-size="10" fill="#334155">puntaje_saber11 | tipo_colegio</text>
+
+                        <!-- Dim_Finanzas -->
+                        <rect x="20" y="210" width="200" height="105" rx="6" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+                        <rect x="20" y="210" width="200" height="26" rx="6" fill="#e2e8f0"/>
+                        <text x="120" y="227" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">Dim_Finanzas</text>
+                        <text x="32" y="252" font-size="10" fill="#94a3b8">🚫 documento (oculto)</text>
+                        <text x="32" y="268" font-size="10" fill="#334155">estado_pago | periodo</text>
+                        <text x="32" y="284" font-size="10" fill="#334155">∑ valor_liquidado</text>
+
+                        <!-- Fact_Cohorte_2025_1 -->
+                        <rect x="290" y="90" width="210" height="165" rx="6" fill="#ffffff" stroke="#0f766e" stroke-width="2.5"/>
+                        <rect x="290" y="90" width="210" height="28" rx="6" fill="#0f766e"/>
+                        <text x="395" y="108" font-weight="700" font-size="11.5" text-anchor="middle" fill="#ffffff">Fact_Cohorte_2025_1</text>
+                        <text x="302" y="134" font-size="10" fill="#94a3b8">🚫 documento | 🚫 correo_inst...</text>
+                        <text x="302" y="150" font-size="10" fill="#334155">∑ creditos (Aditiva)</text>
+                        <text x="302" y="166" font-size="10" fill="#334155">promedio_limpio (No aditiva)</text>
+                        <text x="302" y="182" font-size="10" fill="#334155">programa | periodo | matriculado</text>
+                        <text x="302" y="202" font-size="10" font-weight="600" fill="#0f766e">🧮 16 Medidas DAX Verificadas</text>
+
+                        <!-- Dim_Bienestar -->
+                        <rect x="560" y="20" width="200" height="105" rx="6" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+                        <rect x="560" y="20" width="200" height="26" rx="6" fill="#e2e8f0"/>
+                        <text x="660" y="37" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">Dim_Bienestar</text>
+                        <text x="572" y="62" font-size="10" fill="#94a3b8">🚫 documento (oculto)</text>
+                        <text x="572" y="78" font-size="10" fill="#334155">fecha | programa | tipo_registro</text>
+                        <text x="572" y="94" font-size="9.5" fill="#166534">✓ Columna observacion eliminada</text>
+
+                        <!-- Dim_Moodle_Alertas -->
+                        <rect x="560" y="210" width="200" height="110" rx="6" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+                        <rect x="560" y="210" width="200" height="26" rx="6" fill="#e2e8f0"/>
+                        <text x="660" y="227" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">Dim_Moodle_Alertas</text>
+                        <text x="572" y="252" font-size="10" fill="#94a3b8">🚫 correo (oculto)</text>
+                        <text x="572" y="268" font-size="10" fill="#334155">nota_s48_prom | acc_s78_sum</text>
+                        <text x="572" y="284" font-size="10" fill="#334155">acc_w1_8 | nota_w1_8</text>
+
+                        <!-- Líneas de relación -->
+                        <line x1="220" y1="80" x2="290" y2="140" stroke="#475569" stroke-width="1.8"/>
+                        <text x="232" y="80" font-size="10" font-weight="bold">1</text><text x="278" y="138" font-size="12" font-weight="bold">*</text>
+
+                        <line x1="220" y1="260" x2="290" y2="200" stroke="#475569" stroke-width="1.8"/>
+                        <text x="232" y="268" font-size="10" font-weight="bold">1</text><text x="278" y="208" font-size="12" font-weight="bold">*</text>
+
+                        <line x1="560" y1="75" x2="500" y2="140" stroke="#475569" stroke-width="1.8"/>
+                        <text x="545" y="75" font-size="12" font-weight="bold">*</text><text x="508" y="138" font-size="10" font-weight="bold">1</text>
+
+                        <line x1="560" y1="260" x2="500" y2="200" stroke="#475569" stroke-width="1.8"/>
+                        <text x="545" y="268" font-size="10" font-weight="bold">1</text><text x="508" y="208" font-size="12" font-weight="bold">*</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- RETO 3: ARQUITECTURA -->
+        <section id="reto3" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-5">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">Reto 3 · Arquitectura Objetivo del Observatorio</h2>
+                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">Batch + Streaming + Lakehouse</span>
+            </div>
+
+            <div class="overflow-x-auto bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
+                <svg width="920" height="290" viewBox="0 0 920 290" class="mx-auto">
+                    <!-- 1. Fuentes -->
+                    <rect x="10" y="20" width="145" height="250" rx="8" fill="#ffffff" stroke="#64748b" stroke-dasharray="4"/>
+                    <text x="82" y="42" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">1. FUENTES</text>
+                    <rect x="22" y="55" width="120" height="36" rx="4" fill="#e2e8f0"/><text x="82" y="77" font-size="9.5" text-anchor="middle">Internas: SIS / Admisiones</text>
+                    <rect x="22" y="100" width="120" height="36" rx="4" fill="#e2e8f0"/><text x="82" y="122" font-size="9.5" text-anchor="middle">Internas: ERP / Bienestar</text>
+                    <rect x="22" y="145" width="120" height="36" rx="4" fill="#fee2e2"/><text x="82" y="167" font-size="9.5" font-weight="600" text-anchor="middle" fill="#991b1b">Moodle LMS (Logs)</text>
+                    <rect x="22" y="195" width="120" height="42" rx="4" fill="#e0f2fe"/><text x="82" y="213" font-size="9" text-anchor="middle" fill="#0369a1">Externas: ICFES Saber 11</text><text x="82" y="227" font-size="8.5" text-anchor="middle" fill="#0369a1">MEN SPADIES / DANE</text>
+
+                    <!-- 2. Ingesta -->
+                    <line x1="155" y1="95" x2="225" y2="95" stroke="#0284c7" stroke-width="2.5"/>
+                    <text x="190" y="80" font-size="8.5" font-weight="700" text-anchor="middle" fill="#0284c7">INGESTA BATCH</text>
+                    <text x="190" y="91" font-size="8" text-anchor="middle" fill="#475569">Diaria / Semestral</text>
+
+                    <line x1="155" y1="163" x2="225" y2="163" stroke="#dc2626" stroke-width="2.5"/>
+                    <text x="190" y="148" font-size="8.5" font-weight="700" text-anchor="middle" fill="#dc2626">STREAMING</text>
+                    <text x="190" y="159" font-size="8" text-anchor="middle" fill="#475569">Tiempo Real (Kafka)</text>
+
+                    <!-- 3. Data Lake Zonas -->
+                    <rect x="225" y="20" width="230" height="250" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+                    <text x="340" y="42" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">2. DATA LAKE (MEDALLION)</text>
+                    <rect x="240" y="55" width="200" height="45" rx="5" fill="#cbd5e1"/>
+                    <text x="340" y="75" font-size="10" font-weight="700" text-anchor="middle">Zona Bronze / Raw</text>
+                    <text x="340" y="90" font-size="8.5" text-anchor="middle">CSV y JSON crudos inmutables</text>
+
+                    <rect x="240" y="112" width="200" height="65" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+                    <text x="340" y="130" font-size="10" font-weight="700" text-anchor="middle" fill="#92400e">🔒 Zona Silver (Limpieza + Ley 1581)</text>
+                    <text x="340" y="145" font-size="8.5" text-anchor="middle" fill="#92400e">Aquí se anonimiza Bienestar:</text>
+                    <text x="340" y="158" font-size="8" text-anchor="middle" fill="#92400e">Hash SHA-256 y borrado de observación</text>
+
+                    <rect x="240" y="190" width="200" height="55" rx="5" fill="#ccfbf1" stroke="#0f766e"/>
+                    <text x="340" y="210" font-size="10" font-weight="700" text-anchor="middle" fill="#115e59">Zona Gold (Curada)</text>
+                    <text x="340" y="226" font-size="8.5" text-anchor="middle" fill="#115e59">Tablas conformadas sin PII</text>
+
+                    <!-- 4. DW / Lakehouse & Capa Semántica -->
+                    <line x1="455" y1="215" x2="495" y2="215" stroke="#0f766e" stroke-width="2.5"/>
+                    <rect x="495" y="20" width="185" height="250" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.5"/>
+                    <text x="587" y="42" font-weight="700" font-size="11" text-anchor="middle" fill="#0f766e">3. DW &amp; CAPA SEMÁNTICA</text>
+                    <rect x="510" y="60" width="155" height="75" rx="5" fill="#f0fdfa" stroke="#0f766e"/>
+                    <text x="587" y="82" font-size="10" font-weight="700" text-anchor="middle" fill="#0f766e">Lakehouse / DW</text>
+                    <text x="587" y="98" font-size="8.5" text-anchor="middle">Esquema Estrella (Kimball)</text>
+                    <text x="587" y="112" font-size="8.5" text-anchor="middle">1 Hechos + 4 Dimensiones</text>
+
+                    <rect x="510" y="155" width="155" height="90" rx="5" fill="#0f766e"/>
+                    <text x="587" y="178" font-size="10" font-weight="700" text-anchor="middle" fill="#ffffff">Capa Semántica BI</text>
+                    <text x="587" y="196" font-size="8.5" text-anchor="middle" fill="#ccfbf1">Medidas DAX Oficiales</text>
+                    <text x="587" y="212" font-size="8.5" text-anchor="middle" fill="#ccfbf1">Row-Level Security (RLS)</text>
+                    <text x="587" y="228" font-size="8.5" text-anchor="middle" fill="#ccfbf1">Refresco Programado</text>
+
+                    <!-- 5. Consumo y Roles -->
+                    <line x1="680" y1="110" x2="725" y2="110" stroke="#0284c7" stroke-width="2"/>
+                    <line x1="680" y1="200" x2="725" y2="200" stroke="#dc2626" stroke-width="2"/>
+                    <rect x="725" y="20" width="180" height="250" rx="8" fill="#ffffff" stroke="#64748b" stroke-dasharray="4"/>
+                    <text x="815" y="42" font-weight="700" font-size="11" text-anchor="middle" fill="#0f172a">4. CONSUMO Y ROLES</text>
+
+                    <rect x="738" y="58" width="154" height="85" rx="5" fill="#e0f2fe" stroke="#0284c7"/>
+                    <text x="815" y="76" font-size="9.5" font-weight="700" text-anchor="middle" fill="#0369a1">Tablero BI Autoservicio</text>
+                    <text x="815" y="92" font-size="8.5" text-anchor="middle">• Rectoría y Vicerrectoría</text>
+                    <text x="815" y="106" font-size="8.5" text-anchor="middle">• Decanos y Dir. Programa</text>
+                    <text x="815" y="120" font-size="8.5" text-anchor="middle">• Analistas de Permanencia</text>
+
+                    <rect x="738" y="160" width="154" height="90" rx="5" fill="#fee2e2" stroke="#dc2626"/>
+                    <text x="815" y="178" font-size="9.5" font-weight="700" text-anchor="middle" fill="#991b1b">🔔 Canal de Alertas</text>
+                    <text x="815" y="194" font-size="8.5" text-anchor="middle" fill="#7f1d1d">Teams / Correo / Webhook</text>
+                    <text x="815" y="210" font-size="8.5" font-weight="600" text-anchor="middle" fill="#7f1d1d">Rol: Consejeros y Tutores</text>
+                    <text x="815" y="225" font-size="8" text-anchor="middle" fill="#7f1d1d">Frecuencia: Semanal (Top ≤120)</text>
+                </svg>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
+                            <th class="p-3">Componente / Tecnología</th>
+                            <th class="p-3">Frecuencia</th>
+                            <th class="p-3">Justificación Técnica (Máximo 2 líneas según rúbrica)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr><td class="p-3 font-semibold">Apache Kafka / Event Hubs (Streaming)</td><td class="p-3">Tiempo real / Diario</td><td class="p-3">Captura de forma continua los eventos de acceso y calificaciones parciales desde Moodle sin impactar el rendimiento del LMS.</td></tr>
+                        <tr><td class="p-3 font-semibold">Azure Data Factory / Power Query (Batch)</td><td class="p-3">Diaria (ERP) / Semestral (SIS)</td><td class="p-3">Orquesta la extracción por lotes desde el SIS de matrículas, Admisiones, ERP Financiero y registros de Bienestar.</td></tr>
+                        <tr><td class="p-3 font-semibold">Data Lake (Zonas Bronze, Silver, Gold)</td><td class="p-3">Continua por capas</td><td class="p-3">Separa el dato crudo (Bronze), ejecuta la limpieza y anonimización Ley 1581 de Bienestar en Silver, y publica tablas limpias en Gold.</td></tr>
+                        <tr><td class="p-3 font-semibold">Data Warehouse / Lakehouse (Delta/SQL)</td><td class="p-3">Actualización diaria</td><td class="p-3">Almacena el esquema estrella consolidado con transacciones ACID y alto rendimiento para consultas analíticas multidimensionales.</td></tr>
+                        <tr><td class="p-3 font-semibold">Capa Semántica y Tablero (Power BI)</td><td class="p-3">Interactiva en vivo</td><td class="p-3">Centraliza las medidas DAX oficiales y habilita el BI de autoservicio para Decanos y Directores mediante filtros dinámicos en la web.</td></tr>
+                        <tr><td class="p-3 font-semibold">Canal de Alertas (Power Automate / API)</td><td class="p-3">Semanal (Semanas 1 a 8)</td><td class="p-3">Notifica automáticamente a los Consejeros de Bienestar los casos priorizados (máximo 120 cupos) para activar protocolos de retención.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- RETO 4: TABLERO INTERACTIVO + EMBED POWER BI -->
+        <section id="reto4" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-5">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">Reto 4 · Tablero Interactivo de Permanencia (Filtros en Vivo)</h2>
+                <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full">7 Indicadores</span>
+            </div>
+
+            <!-- FILTROS EN VIVO (FACULTAD, PROGRAMA, ESTRATO) -->
+            <div class="bg-slate-900 text-white p-5 rounded-xl mb-6 shadow">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-teal-400 font-bold">BI de Autoservicio · Demostración en Vivo</span>
+                        <h3 class="text-base font-bold">Segmentadores Dinámicos por Facultad, Programa y Estrato</h3>
+                    </div>
+                    <button onclick="resetFiltros()" class="bg-slate-700 hover:bg-slate-600 text-xs px-3 py-1.5 rounded font-semibold transition">↺ Restablecer Filtros (Ver Total Cohorte)</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-900">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">1. Filtrar por Facultad:</label>
+                        <select id="fFacultad" onchange="sincronizarFacultad()" class="w-full p-2.5 rounded-lg text-sm font-medium bg-white">
+                            <option value="TODAS">Todas las Facultades (3)</option>
+                            <option value="Facultad de Ciencias Económicas y Administrativas">Facultad de Ciencias Económicas y Administrativas</option>
+                            <option value="Facultad de Ciencias Sociales y Humanas">Facultad de Ciencias Sociales y Humanas</option>
+                            <option value="Facultad de Ingeniería">Facultad de Ingeniería</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">2. Filtrar por Programa:</label>
+                        <select id="fPrograma" onchange="recalcularTablero()" class="w-full p-2.5 rounded-lg text-sm font-medium bg-white">
+                            <option value="TODOS">Todos los Programas (6)</option>
+                            <option value="Administración de Empresas">Administración de Empresas</option>
+                            <option value="Contaduría Pública">Contaduría Pública</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Ingeniería Informática">Ingeniería Informática</option>
+                            <option value="Psicología">Psicología</option>
+                            <option value="Trabajo Social">Trabajo Social</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1 font-medium">3. Filtrar por Estrato Socioeconómico:</label>
+                        <select id="fEstrato" onchange="recalcularTablero()" class="w-full p-2.5 rounded-lg text-sm font-medium bg-white">
+                            <option value="TODOS">Todos los Estratos (1 al 6)</option>
+                            <option value="1">Estrato 1</option>
+                            <option value="2">Estrato 2</option>
+                            <option value="3">Estrato 3</option>
+                            <option value="4">Estrato 4</option>
+                            <option value="5">Estrato 5</option>
+                            <option value="6">Estrato 6</option>
+                        </select>
+                    </div>
+                </div>
+                <p id="resumenFiltro" class="text-xs text-teal-300 mt-3 font-medium">Mostrando: Cohorte Completa 2025-1 (1.200 matriculados / 1.025 retenidos / 175 desertores)</p>
+            </div>
+
+            <!-- REGLA DE ALERTA + 7 TARJETAS CON SEMÁFORO (se calculan con las filas anónimas reales) -->
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <label class="text-xs font-semibold text-slate-600">Regla de alerta que se muestra:</label>
+                <select id="fRegla" onchange="recalcularTablero()" class="p-2 rounded-lg text-sm border border-slate-300 bg-white">
+                    <option value="act">Regla actual (nota S4/S8 &lt; 3,0 o 0 accesos S7+S8)</option>
+                    <option value="nue">Regla nueva (accesos S1–8 ≤ 22 y nota S1–8 ≤ 64)</option>
+                </select>
+                <span class="text-xs text-slate-500">Semáforo: 🟢 cumple la meta · 🟡 a menos de 10 % de la meta · 🔴 no cumple</span>
+            </div>
+            <div id="kpiGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+
+            <div class="border border-slate-200 rounded-xl p-5 mb-6">
+                <div class="flex flex-wrap justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-sm md:text-base">Deserción por programa (según los filtros)</h3>
+                    <span class="text-xs text-slate-500">Barra ámbar = por encima de la meta de 15 %</span>
+                </div>
+                <div id="barrasProgramas" class="space-y-3 text-xs md:text-sm"></div>
+            </div>
+
+            <!-- TABLERO DE POWER BI -->
+            <div class="border-2 border-dashed border-teal-600 rounded-xl p-5 bg-teal-50/40">
+                <h3 class="font-bold text-teal-950 text-sm md:text-base mb-1">Tablero en Power BI</h3>
+                <p class="text-xs text-slate-600 mb-3" id="pbiNota"></p>
+                <div id="contenedorIframe" class="w-full bg-white rounded-lg border border-slate-200 overflow-hidden">
+                    <iframe id="pbiFrame" title="Observatorio_Permanencia_PowerBI" width="100%" height="540" src="about:blank" frameborder="0" allowFullScreen="true" class="hidden"></iframe>
+                    <img id="pbiImg" src="tablero_powerbi.png" alt="Captura del tablero en Power BI Desktop" class="w-full h-auto" onerror="this.classList.add('hidden'); document.getElementById('pbiFallback').classList.remove('hidden');">
+                    <div id="pbiFallback" class="hidden p-6 text-center bg-slate-50 border-t border-slate-200">
+                        <div class="inline-flex items-center gap-2 bg-teal-100 text-teal-800 text-xs px-3 py-1 rounded-full font-semibold mb-2">📊 Vista Resumen del Modelo Power BI Desktop</div>
+                        <p class="text-xs text-slate-500 max-w-lg mx-auto">Coloca tu archivo <code class="font-mono text-slate-700 bg-white px-1 py-0.5 rounded border">tablero_powerbi.png</code> en la misma carpeta para visualizar la captura oficial, o revisa los indicadores calculados en vivo arriba.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RETO 5: MEJORA DE LA ALERTA TEMPRANA -->
+        <section id="reto5" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4 mb-5">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900">Reto 5 · Optimización de la Alerta Temprana (Semanas 1 a 8)</h2>
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">117 Alertados (≤120) · Cobertura 36,0% (≥35%)</span>
+            </div>
+
+            <div class="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6 text-sm">
+                <p class="font-bold text-teal-950 mb-1">Definición de la Nueva Regla (Moodle Semanas 1 a 8):</p>
+                <p class="text-teal-900">Se genera alerta temprana para todo estudiante de la cohorte cuya <strong>suma acumulada de accesos entre las semanas 1 y 8 sea menor o igual a 22</strong> (<code>acc_w1_8 ≤ 22</code>) <strong>Y</strong> cuyo <strong>promedio de notas parciales hasta la semana 8 sea menor o igual a 64 sobre 100</strong> (<code>nota_w1_8 ≤ 64</code>, equivalente a 3,20 en escala 0–5).</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 items-center">
+                <!-- Matriz de Confusión -->
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800 mb-3 text-center">Matriz de Confusión (N = 1.200 Estudiantes Cohorte)</h3>
+                    <table class="w-full text-center border-collapse text-xs md:text-sm border border-slate-300">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 border border-slate-300">Predicción \ Realidad</th>
+                                <th class="p-3 border border-slate-300 text-rose-800">Desertó en 2025-2 (175)</th>
+                                <th class="p-3 border border-slate-300 text-emerald-800">No Desertó (1.025)</th>
+                                <th class="p-3 border border-slate-300">Total Fila</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="p-3 bg-slate-100 border border-slate-300 text-left">Alertó (Sí = 1)</th>
+                                <td class="p-4 bg-emerald-100 border border-slate-300 font-bold text-emerald-950 text-base">63<div class="text-[11px] font-normal">Verdadero Positivo (VP)</div></td>
+                                <td class="p-4 bg-rose-50 border border-slate-300 font-bold text-rose-900 text-base">54<div class="text-[11px] font-normal">Falso Positivo (FP)</div></td>
+                                <td class="p-3 font-bold border border-slate-300">117</td>
+                            </tr>
+                            <tr>
+                                <th class="p-3 bg-slate-100 border border-slate-300 text-left">No Alertó (No = 0)</th>
+                                <td class="p-4 bg-amber-50 border border-slate-300 font-bold text-amber-900 text-base">112<div class="text-[11px] font-normal">Falso Negativo (FN)</div></td>
+                                <td class="p-4 bg-slate-50 border border-slate-300 font-bold text-slate-800 text-base">971<div class="text-[11px] font-normal">Verdadero Negativo (VN)</div></td>
+                                <td class="p-3 font-bold border border-slate-300">1.083</td>
+                            </tr>
+                            <tr class="bg-slate-100 font-bold">
+                                <td class="p-2.5 border border-slate-300 text-left">Total Columna</td>
+                                <td class="p-2.5 border border-slate-300">175</td>
+                                <td class="p-2.5 border border-slate-300">1.025</td>
+                                <td class="p-2.5 border border-slate-300">1.200</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Comparativa Regla Actual vs Nueva -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <p class="text-xs font-semibold text-emerald-900">Alertados</p>
+                            <p class="text-2xl font-bold text-emerald-800 my-1">117</p>
+                            <p class="text-[11px] text-emerald-700">Capacidad: ≤ 120</p>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <p class="text-xs font-semibold text-emerald-900">Nueva Precisión</p>
+                            <p class="text-2xl font-bold text-emerald-800 my-1">53,8 %</p>
+                            <p class="text-[11px] text-emerald-700">63 / 117 (+21,2 pp)</p>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-300 p-4 rounded-xl">
+                            <p class="text-xs font-semibold text-emerald-900">Nueva Cobertura</p>
+                            <p class="text-2xl font-bold text-emerald-800 my-1">36,0 %</p>
+                            <p class="text-[11px] text-emerald-700">63 / 175 (Meta ≥ 35%)</p>
+                        </div>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                        <strong>Impacto Operativo:</strong> Mientras la regla anterior desbordaba a Bienestar con 370 casos (249 falsos positivos, es decir 67,3 % de las alertas), la nueva regla utiliza el <strong>97,5% de la capacidad de los consejeros (117 de 120 cupos)</strong> y eleva la precisión del 32,7 % al <strong>53,8%</strong>, asegurando que más de la mitad de las llamadas intervengan a desertores reales.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- RETO 6: PROSPECTIVA TECNOLÓGICA -->
+        <section id="reto6" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 border-b border-slate-200 pb-4 mb-5">Reto 6 · Prospectiva Tecnológica (Fase 2 del Observatorio)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
+                            <th class="p-3">Tecnología Propuesta</th>
+                            <th class="p-3">Problema Real del Caso que Resuelve</th>
+                            <th class="p-3">Indicador del Tablero que Mejoraría</th>
+                            <th class="p-3">Riesgo Principal y Estrategia de Mitigación</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr>
+                            <td class="p-3 font-bold text-teal-900">1. Machine Learning Supervisado (XGBoost + SHAP)</td>
+                            <td class="p-3">Los umbrales fijos en Moodle dejan escapar a 112 desertores (falsos negativos) cuyo riesgo proviene de combinar deuda en el ERP (<code>PENDIENTE</code>), bajo puntaje Saber 11 y estrato 1 o 2.</td>
+                            <td class="p-3 font-semibold">Precisión y Cobertura de la Alerta Temprana (manteniendo el tope de ≤ 120 cupos).</td>
+                            <td class="p-3"><strong>Riesgo:</strong> Sesgo socioeconómico contra estratos 1 y 2.<br><strong>Mitigación:</strong> Auditoría de equidad (Fairness) y exclusión de variables demográficas directas en el entrenamiento.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold text-teal-900">2. Procesamiento de Lenguaje Natural (NLP Privado Local)</td>
+                            <td class="p-3">Las notas clínicas de <code>bienestar_registros</code> tuvieron que suprimirse por la Ley 1581, perdiendo señales tempranas de crisis emocional, ansiedad o intención de cancelación.</td>
+                            <td class="p-3 font-semibold">Retención de Primer Periodo y Tasa de Deserción por Programa.</td>
+                            <td class="p-3"><strong>Riesgo:</strong> Re-identificación o fuga de datos sensibles de salud.<br><strong>Mitigación:</strong> Modelo NLP ejecutado localmente en Zona Silver que solo exporta un <em>score</em> numérico de riesgo (0 a 1) a Zona Gold.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold text-teal-900">3. Automatización Robótica y Orquestación (RPA + Webhooks)</td>
+                            <td class="p-3">Los consejeros asignan citas manualmente y los estudiantes con pago <code>PENDIENTE</code> en el ERP no reciben orientación oportuna de becas o financiación antes del cierre de matrícula.</td>
+                            <td class="p-3 font-semibold">Retención de Primer Periodo y Absorción de admitidos.</td>
+                            <td class="p-3"><strong>Riesgo:</strong> Fatiga de alertas (spam) hacia estudiantes y tutores.<br><strong>Mitigación:</strong> Tope estricto de 120 casos semanales balanceados por carga de consejero y consentimiento previo (Habeas Data).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- REFERENCIAS APA 7 -->
+        <section id="apa" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <h2 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-3 mb-4">Referencias Bibliográficas</h2>
+            <ul class="space-y-3 text-xs md:text-sm text-slate-700 pl-6 -indent-6">
+                <li>Fundación Universitaria Católica del Norte. (2026). <em>Unidad 2 / Elemento de competencia 2 (EC2): Modelos de datos multidimensionales, procesos ETL y arquitectura de Business Intelligence</em> [Material de estudio del curso Introducción a la Inteligencia de Negocios]. CAVI UCN.</li>
+                <li>Fundación Universitaria Católica del Norte. (2026). <em>Unidad 3 / Elemento de competencia 3 (EC3): Explotación de datos, diseño de indicadores clave (KPI) y prospectiva tecnológica</em> [Material de estudio del curso Introducción a la Inteligencia de Negocios]. CAVI UCN.</li>
+                <li>Chaudhuri, S., Dayal, U., &amp; Narasayya, V. (2011). An overview of business intelligence technology. <em>Communications of the ACM</em>, 54(8), 88–98. https://doi.org/10.1145/1978542.1978562</li>
+                <li>Congreso de la República de Colombia. (2012, 17 de octubre). <em>Ley Estatutaria 1581 de 2012. Por la cual se dictan disposiciones generales para la protección de datos personales</em>. Diario Oficial No. 48.587.</li>
+                <li>Kimball, R., &amp; Ross, M. (2013). <em>The data warehouse toolkit: The definitive guide to dimensional modeling</em> (3.ª ed.). John Wiley &amp; Sons.</li>
+                <li>Google 2026.<em>Gemini (Versión 3.1 Pro) (LLM).</em> https://gemini.google.com </li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs text-center py-6 px-4">
+        Observatorio de Permanencia · Universidad Andina del Norte · Entregable A2_Grupo# · Cumplimiento Ley 1581 de 2012
+    </footer>
+
+    <!-- MOTOR BI INTERACTIVO EXACTO DE LA COHORTE (1.200 ESTUDIANTES) -->
+    <script>
+// Filas ANÓNIMAS reales de la cohorte 2025-1: [id, programa, estrato, créditos, promedio, alertaActual, alertaNueva, desertó]
+const DATA = {"progs":["Administración de Empresas","Contaduría Pública","Ingeniería Industrial","Ingeniería Informática","Psicología","Trabajo Social"],"facs":["Facultad de Ciencias Económicas y Administrativas","Facultad de Ciencias Sociales y Humanas","Facultad de Ingeniería"],"pf":[0,0,2,2,1,1],"rows":[["E0002",0,2,15,3.0,0,0,1],["E0003",4,4,17,3.5,0,0,0],["E0004",1,4,16,3.1,1,0,0],["E0005",5,3,15,2.5,1,1,1],["E0006",3,3,14,3.6,0,0,0],["E0007",1,1,17,4.2,0,0,0],["E0008",4,6,16,3.5,0,0,0],["E0009",3,2,18,3.3,0,0,1],["E0010",2,3,15,4.4,0,0,0],["E0012",0,4,18,2.3,1,0,0],["E0013",2,4,16,2.8,1,0,0],["E0014",5,4,18,2.0,1,1,1],["E0015",5,2,14,2.7,1,0,0],["E0017",3,4,17,3.2,1,0,0],["E0018",0,1,15,3.0,0,0,0],["E0020",3,2,18,3.0,0,0,0],["E0021",4,3,18,3.6,0,0,0],["E0022",3,1,16,3.5,0,0,0],["E0023",3,3,17,4.4,0,0,0],["E0024",2,2,14,4.1,0,0,0],["E0025",0,3,18,3.7,0,0,0],["E0026",0,3,17,3.9,0,0,0],["E0027",3,2,15,3.3,1,1,1],["E0029",5,3,16,4.1,0,0,0],["E0030",3,3,17,3.7,0,0,0],["E0032",4,3,14,3.7,1,0,0],["E0033",2,3,18,2.1,1,1,1],["E0035",2,1,15,3.0,0,0,0],["E0036",1,4,16,3.6,0,0,0],["E0037",2,2,18,4.0,0,0,0],["E0038",2,2,15,3.4,1,0,0],["E0039",4,2,16,2.6,1,0,0],["E0040",0,1,14,3.8,0,0,0],["E0041",1,2,16,3.8,0,0,0],["E0043",0,1,17,4.6,0,0,0],["E0044",0,4,16,3.4,1,0,0],["E0045",4,2,15,3.3,0,0,0],["E0046",1,1,15,3.9,0,0,0],["E0047",2,2,15,4.1,0,0,0],["E0048",3,2,16,3.0,0,0,0],["E0049",2,2,18,4.0,0,0,0],["E0050",0,2,16,2.2,1,1,1],["E0051",4,3,14,3.2,1,0,0],["E0052",5,4,16,3.2,0,0,0],["E0053",4,3,18,3.1,1,0,0],["E0054",1,4,15,3.3,1,0,0],["E0055",0,6,14,3.9,0,0,0],["E0057",0,3,18,4.0,0,0,0],["E0058",2,3,18,4.0,0,0,0],["E0059",2,6,15,4.2,0,0,0],["E0060",2,3,15,null,0,0,0],["E0061",2,3,17,4.2,0,0,0],["E0062",3,4,18,1.9,1,1,1],["E0063",4,5,18,3.0,0,0,0],["E0064",5,1,16,3.2,0,0,0],["E0065",2,3,14,3.3,0,0,0],["E0066",5,2,17,3.5,0,0,1],["E0067",3,2,18,2.9,1,0,1],["E0068",4,3,17,3.3,1,0,0],["E0069",0,1,17,3.5,0,0,0],["E0070",4,1,14,3.3,0,0,0],["E0071",2,3,15,3.2,1,0,0],["E0072",4,3,18,3.4,0,0,0],["E0073",3,1,14,3.4,0,0,0],["E0075",5,2,14,4.1,0,0,0],["E0076",1,2,14,null,0,0,0],["E0077",0,1,17,3.6,0,0,1],["E0078",3,3,14,3.5,0,0,0],["E0079",5,2,15,3.3,1,0,0],["E0080",3,1,17,3.0,0,0,0],["E0081",1,2,14,2.8,1,0,0],["E0082",0,6,14,2.9,1,0,0],["E0083",1,1,14,3.1,0,0,1],["E0084",5,3,17,3.0,0,0,0],["E0085",3,3,18,3.3,0,0,0],["E0086",1,3,16,3.3,0,0,0],["E0087",4,3,16,3.4,0,0,0],["E0088",4,4,16,3.4,0,0,0],["E0089",4,3,18,4.5,0,0,0],["E0090",5,3,17,2.6,1,0,1],["E0092",2,2,17,3.5,0,0,0],["E0093",5,1,14,null,0,0,0],["E0094",1,4,15,3.1,1,1,0],["E0095",4,1,15,4.2,0,0,1],["E0097",5,2,18,4.4,0,0,0],["E0098",0,3,18,3.0,1,0,0],["E0099",5,2,16,3.1,0,0,0],["E0100",0,2,15,2.9,1,0,0],["E0101",5,2,18,3.1,1,0,0],["E0104",3,3,16,3.4,0,0,0],["E0106",5,3,17,3.2,0,0,0],["E0107",0,3,18,3.6,0,0,0],["E0109",3,1,14,3.6,0,0,0],["E0110",5,1,18,2.6,1,1,1],["E0111",3,2,17,3.4,0,0,0],["E0112",4,3,16,3.6,0,0,0],["E0113",2,3,15,3.5,0,0,0],["E0114",1,3,16,5.0,0,0,0],["E0116",3,3,16,2.8,1,0,0],["E0117",4,4,16,3.3,1,0,0],["E0118",4,3,17,2.6,1,1,1],["E0119",0,3,16,3.3,0,0,0],["E0120",5,5,16,2.3,1,0,0],["E0121",2,2,14,3.2,1,0,0],["E0122",0,1,18,3.6,1,0,0],["E0123",0,2,15,2.0,1,1,1],["E0125",0,3,16,3.0,1,0,0],["E0127",0,2,16,3.6,0,0,0],["E0128",0,4,16,3.1,0,0,0],["E0129",4,1,18,3.4,0,0,0],["E0130",5,4,18,4.1,0,0,0],["E0131",4,1,18,2.5,1,1,0],["E0132",5,2,16,3.8,0,0,0],["E0133",3,1,17,3.6,0,0,0],["E0134",5,1,17,3.0,1,0,0],["E0135",3,2,15,3.4,1,0,1],["E0136",3,1,14,3.8,0,0,0],["E0137",2,3,18,3.7,0,0,0],["E0138",2,2,14,2.7,1,0,0],["E0139",4,6,15,3.7,0,0,0],["E0140",1,2,17,3.2,0,0,0],["E0141",0,3,16,3.7,0,0,0],["E0142",3,2,14,3.8,0,0,1],["E0143",4,2,15,2.8,1,0,0],["E0144",4,3,17,4.4,0,0,0],["E0145",2,1,15,3.7,0,0,0],["E0147",2,3,16,4.3,0,0,0],["E0148",3,1,14,3.9,1,0,0],["E0150",4,5,16,2.7,0,0,0],["E0152",0,2,18,2.6,1,0,1],["E0154",4,1,15,3.3,1,0,0],["E0155",2,2,14,3.8,0,0,0],["E0156",4,4,14,2.7,1,0,0],["E0157",4,1,14,3.6,0,0,0],["E0158",4,5,17,3.4,0,0,0],["E0159",5,2,17,2.8,1,0,1],["E0160",2,2,14,3.3,0,0,0],["E0161",5,2,15,3.3,0,0,0],["E0162",0,2,15,4.0,0,0,0],["E0163",5,2,14,3.5,0,0,0],["E0164",3,2,15,3.1,0,0,0],["E0165",1,2,15,3.6,0,0,0],["E0166",0,3,15,2.1,1,1,0],["E0169",1,2,15,3.0,1,0,0],["E0171",2,5,15,null,1,1,0],["E0173",5,2,16,3.1,0,0,0],["E0174",3,1,15,3.0,1,0,1],["E0175",4,3,15,2.8,0,0,1],["E0176",0,2,17,3.8,0,0,0],["E0177",5,3,17,3.8,0,0,0],["E0178",4,3,14,3.1,0,0,0],["E0179",0,2,17,2.8,1,0,1],["E0180",4,3,17,3.1,0,0,0],["E0181",4,3,18,4.2,0,0,0],["E0182",4,4,18,3.5,0,0,0],["E0183",3,2,14,2.9,1,0,0],["E0184",2,1,14,3.4,0,0,0],["E0186",3,2,14,3.6,0,0,0],["E0187",3,3,17,3.2,1,0,0],["E0188",0,2,16,3.3,0,0,0],["E0189",0,2,15,3.1,0,0,0],["E0190",4,6,17,3.0,0,0,0],["E0191",5,3,16,3.9,0,0,0],["E0192",4,1,16,3.8,0,0,0],["E0193",0,5,18,3.3,0,0,0],["E0194",3,2,18,5.0,0,0,0],["E0195",5,3,18,4.0,0,0,0],["E0196",2,3,16,4.0,0,0,0],["E0197",3,3,18,4.0,0,0,0],["E0198",3,1,14,4.5,0,0,0],["E0199",2,3,15,3.7,0,0,0],["E0200",0,4,15,3.9,1,0,0],["E0201",4,3,15,2.0,1,1,0],["E0203",4,2,16,4.2,0,0,0],["E0204",0,2,14,2.5,1,1,1],["E0205",1,3,16,3.6,0,0,0],["E0206",2,1,16,3.0,1,0,0],["E0207",1,5,16,3.2,0,0,0],["E0208",0,2,15,2.8,1,1,0],["E0209",0,6,18,3.1,0,0,0],["E0211",0,1,15,2.8,1,0,1],["E0212",4,3,14,3.0,1,1,1],["E0213",5,2,16,4.5,0,0,0],["E0214",5,3,18,3.9,0,0,0],["E0215",1,1,14,3.2,0,0,0],["E0216",2,1,18,4.2,0,0,0],["E0218",2,2,16,3.8,0,0,0],["E0219",1,5,14,4.6,0,0,0],["E0221",3,2,16,1.7,1,1,1],["E0222",1,3,14,3.4,1,0,0],["E0223",3,1,16,3.0,0,1,1],["E0224",2,3,18,2.9,1,0,0],["E0225",0,2,14,3.5,0,0,0],["E0226",1,1,17,3.4,0,0,0],["E0227",3,5,17,3.1,1,0,0],["E0228",3,2,17,2.4,1,1,0],["E0229",1,2,16,3.0,0,0,0],["E0231",1,4,16,3.0,0,0,0],["E0232",5,3,17,2.6,1,0,0],["E0233",4,1,17,3.3,0,0,0],["E0234",1,2,14,2.9,0,1,1],["E0235",2,1,14,3.5,0,0,0],["E0236",0,2,16,3.2,1,0,0],["E0237",0,4,17,3.5,0,0,0],["E0238",0,3,15,3.9,0,0,0],["E0239",5,4,15,3.8,0,0,0],["E0240",3,2,18,2.9,0,0,0],["E0242",3,2,16,5.0,0,0,0],["E0243",4,3,15,4.9,0,0,0],["E0245",0,3,16,2.8,1,0,0],["E0248",4,1,18,4.1,0,0,0],["E0249",5,2,14,3.6,0,0,0],["E0250",3,1,18,2.8,1,0,1],["E0251",4,1,17,3.8,0,0,0],["E0252",2,6,16,3.0,0,0,0],["E0253",3,3,18,3.3,0,0,0],["E0254",0,3,16,3.8,0,0,0],["E0255",0,4,16,null,1,0,1],["E0256",0,3,17,4.2,0,0,0],["E0257",5,3,18,3.4,1,0,0],["E0258",1,2,17,3.6,0,0,0],["E0259",4,6,17,4.0,0,0,0],["E0261",0,4,14,2.5,1,1,0],["E0262",1,1,18,2.9,0,0,1],["E0263",0,4,15,3.2,0,0,0],["E0266",1,1,18,3.2,1,0,0],["E0267",1,1,18,3.1,1,0,0],["E0268",0,3,18,3.1,0,0,0],["E0269",1,2,14,4.0,0,0,0],["E0270",2,1,15,3.6,0,0,0],["E0271",0,2,17,2.8,1,0,1],["E0272",0,3,18,3.0,1,0,0],["E0273",0,4,15,3.3,0,0,0],["E0274",1,2,18,4.4,0,0,0],["E0275",5,5,15,3.1,0,0,0],["E0276",2,3,16,4.1,0,0,0],["E0278",5,3,14,3.0,1,0,0],["E0279",5,3,15,4.1,0,0,0],["E0280",1,2,15,3.8,0,0,0],["E0281",0,3,15,3.0,0,0,0],["E0282",3,3,16,3.8,0,0,0],["E0283",3,1,16,1.8,1,0,1],["E0284",0,3,16,2.4,1,0,0],["E0285",4,1,14,3.7,0,0,0],["E0286",0,3,18,2.7,1,0,0],["E0287",5,6,15,3.9,0,0,0],["E0288",4,1,15,3.4,0,0,0],["E0289",4,2,18,3.0,0,0,0],["E0290",5,2,17,3.0,0,0,1],["E0291",3,2,16,4.2,0,0,0],["E0292",4,3,18,3.7,0,0,0],["E0294",3,3,15,4.4,0,0,0],["E0295",4,2,16,2.6,1,0,1],["E0297",4,5,18,3.8,0,0,0],["E0300",2,3,14,3.5,0,0,0],["E0301",0,3,15,3.1,1,0,0],["E0302",4,2,14,3.5,0,0,0],["E0304",0,3,16,3.3,0,0,0],["E0305",4,1,16,null,0,0,0],["E0306",0,3,15,3.7,0,0,0],["E0307",0,2,17,3.5,0,0,0],["E0308",1,2,15,3.6,0,0,0],["E0309",1,1,14,null,1,0,1],["E0310",0,1,17,4.6,0,0,0],["E0312",5,5,15,1.8,1,1,0],["E0314",0,2,14,2.3,1,0,0],["E0315",0,4,17,2.8,0,0,0],["E0316",4,6,16,4.5,0,0,0],["E0318",2,1,18,3.4,0,0,0],["E0319",2,2,14,2.5,1,0,0],["E0320",2,4,17,3.3,0,0,0],["E0321",1,2,15,2.7,0,0,1],["E0322",2,3,17,3.2,0,0,0],["E0323",1,5,18,3.6,0,0,0],["E0324",0,5,14,2.8,1,1,1],["E0325",4,3,14,3.0,1,0,0],["E0326",0,3,14,4.2,0,0,0],["E0327",3,1,16,3.1,0,0,1],["E0329",1,2,18,3.5,0,0,0],["E0330",3,3,16,3.7,0,0,0],["E0331",5,2,17,2.9,1,0,0],["E0333",1,1,18,2.8,0,0,0],["E0334",4,3,15,2.8,1,0,0],["E0335",1,5,14,3.0,0,0,0],["E0336",0,4,16,2.8,1,0,0],["E0337",0,3,16,3.1,1,0,1],["E0338",3,3,15,3.2,0,0,0],["E0339",4,2,15,3.8,0,0,0],["E0340",5,4,14,3.9,0,0,0],["E0341",0,2,16,3.9,0,0,0],["E0343",4,1,18,4.4,0,0,0],["E0344",1,3,18,4.4,0,0,0],["E0345",3,2,15,3.8,0,0,0],["E0346",2,4,16,3.0,1,0,0],["E0347",0,3,15,3.3,0,0,0],["E0348",2,1,14,2.1,1,1,1],["E0349",2,6,15,3.2,0,0,0],["E0352",1,3,14,3.4,1,1,0],["E0353",2,3,18,3.7,0,0,0],["E0354",4,2,14,2.9,1,0,0],["E0355",0,3,14,3.4,0,0,0],["E0356",3,2,18,3.2,0,0,0],["E0357",4,4,17,3.6,0,0,0],["E0358",5,3,14,3.4,0,0,0],["E0359",1,2,16,2.9,0,0,0],["E0360",3,4,14,3.4,0,0,0],["E0361",0,1,15,3.6,0,0,0],["E0362",0,1,16,3.5,0,0,1],["E0363",2,3,15,4.1,0,0,0],["E0364",5,1,15,3.5,0,0,0],["E0365",4,2,14,3.3,0,0,0],["E0366",1,2,18,3.5,0,0,0],["E0368",2,2,14,4.3,0,0,0],["E0369",5,3,16,2.6,1,1,1],["E0371",5,5,16,2.6,1,0,0],["E0372",4,2,16,3.4,0,0,0],["E0373",0,2,15,3.4,0,0,0],["E0375",1,2,17,2.0,1,1,0],["E0376",0,3,18,2.9,0,0,1],["E0377",2,3,17,4.2,0,0,0],["E0379",0,2,18,2.4,1,1,1],["E0380",0,1,18,3.6,0,0,0],["E0381",3,2,16,3.1,0,0,0],["E0382",3,6,14,3.8,0,0,0],["E0383",0,1,16,3.0,1,0,0],["E0384",3,2,14,4.1,0,0,0],["E0385",0,4,17,4.0,0,0,0],["E0386",4,3,18,2.8,0,0,1],["E0387",4,5,17,3.4,0,0,0],["E0389",4,4,17,4.4,0,0,0],["E0390",5,6,18,4.0,0,0,0],["E0392",5,2,14,null,1,1,1],["E0394",0,2,18,3.0,1,0,1],["E0395",4,4,17,3.6,0,0,0],["E0397",1,2,15,3.7,0,0,0],["E0398",0,2,15,2.8,0,0,1],["E0399",1,1,14,2.8,1,0,1],["E0400",4,3,17,4.0,0,0,0],["E0401",3,1,14,3.3,0,0,0],["E0402",0,3,16,3.9,0,0,0],["E0403",4,3,17,2.6,1,1,1],["E0404",3,5,16,3.2,0,0,0],["E0405",3,5,18,3.8,1,0,0],["E0406",0,4,18,3.8,0,0,0],["E0409",2,2,16,2.7,1,1,1],["E0411",0,1,16,3.5,1,0,0],["E0412",2,1,14,3.1,0,0,0],["E0413",3,3,15,3.9,0,0,0],["E0414",3,6,16,3.9,1,0,0],["E0415",5,3,16,4.2,0,0,0],["E0416",3,6,17,null,0,0,0],["E0418",5,2,18,4.4,0,0,0],["E0419",0,3,18,4.4,0,0,0],["E0420",3,1,16,3.6,0,0,1],["E0421",0,3,16,3.7,0,0,0],["E0422",4,2,16,4.5,0,0,0],["E0423",4,3,16,2.4,1,0,0],["E0425",4,5,14,1.6,1,1,1],["E0426",5,2,14,2.9,0,1,1],["E0427",2,3,17,3.2,1,0,0],["E0429",5,1,18,3.5,0,0,0],["E0430",2,4,17,3.1,0,0,0],["E0431",5,2,15,3.7,0,0,0],["E0433",4,2,15,3.2,0,0,0],["E0434",3,3,14,2.7,1,0,0],["E0435",3,5,17,2.9,1,0,1],["E0436",1,4,17,3.6,0,0,0],["E0437",5,2,14,4.4,0,0,0],["E0438",5,1,18,3.2,1,0,1],["E0439",2,3,15,4.5,0,0,0],["E0440",2,2,16,4.5,0,0,0],["E0441",2,2,15,1.7,1,1,1],["E0443",1,4,15,2.8,1,0,1],["E0444",0,1,18,2.6,1,0,1],["E0445",3,3,17,2.9,1,0,0],["E0446",4,3,18,3.6,0,0,0],["E0448",2,1,14,3.2,0,0,0],["E0449",4,2,18,4.1,0,0,0],["E0450",0,1,16,3.8,1,0,1],["E0451",4,4,17,3.4,0,0,0],["E0452",4,3,16,4.2,0,0,0],["E0453",4,2,14,3.3,0,0,0],["E0454",3,2,15,3.2,1,0,0],["E0455",2,2,17,3.6,0,0,0],["E0456",3,2,18,4.3,0,0,0],["E0457",3,3,18,3.6,0,0,0],["E0458",3,3,17,3.4,0,0,0],["E0459",3,1,18,3.6,0,0,0],["E0460",1,2,18,3.4,0,0,0],["E0461",4,2,18,4.0,0,0,0],["E0463",2,1,15,2.1,1,1,1],["E0464",2,6,16,2.3,1,0,0],["E0466",5,1,15,3.1,1,0,1],["E0467",4,3,15,3.4,0,0,0],["E0468",2,1,18,3.7,0,0,0],["E0469",4,1,18,3.1,0,0,1],["E0470",3,2,18,3.4,0,0,1],["E0471",3,3,14,3.2,1,0,0],["E0472",0,2,16,2.8,1,1,0],["E0474",0,5,17,3.8,0,0,0],["E0475",3,1,16,2.8,1,0,0],["E0477",3,1,16,3.4,0,0,0],["E0478",3,2,17,3.9,0,0,0],["E0480",0,3,17,3.9,0,0,0],["E0481",3,2,17,4.1,0,0,0],["E0482",1,2,18,4.1,0,0,0],["E0484",3,3,14,3.0,1,0,0],["E0485",1,5,14,3.8,0,0,0],["E0486",0,2,15,2.4,1,0,1],["E0487",0,1,18,3.3,0,0,0],["E0488",3,2,15,3.2,0,0,0],["E0489",0,1,17,2.9,0,0,0],["E0490",1,1,14,2.8,0,0,0],["E0491",4,3,14,3.6,1,0,0],["E0492",1,2,17,2.9,1,1,0],["E0494",2,3,18,4.0,0,0,0],["E0495",2,3,14,3.9,0,0,0],["E0497",0,2,15,3.2,0,0,0],["E0498",5,2,14,2.6,1,1,0],["E0499",3,2,16,3.0,0,0,1],["E0500",1,2,18,2.7,1,0,0],["E0501",3,4,18,3.8,0,0,0],["E0502",5,2,15,4.2,0,0,0],["E0503",3,2,15,4.7,0,0,0],["E0504",1,3,17,3.2,0,0,0],["E0505",0,3,14,3.6,0,0,0],["E0506",3,4,15,4.4,0,0,0],["E0509",3,2,14,2.9,1,0,0],["E0512",3,4,14,3.6,0,0,0],["E0513",4,1,17,3.2,0,0,0],["E0514",0,4,14,2.6,0,0,0],["E0515",4,3,16,4.6,0,0,0],["E0516",5,3,16,3.1,0,0,1],["E0517",2,3,17,3.4,0,0,0],["E0518",4,1,18,null,1,1,0],["E0519",2,2,18,2.7,1,0,0],["E0521",0,1,16,3.9,0,0,0],["E0522",5,3,17,3.1,0,0,0],["E0524",0,1,18,3.2,0,0,0],["E0525",4,3,14,3.2,0,0,0],["E0526",5,1,16,2.5,1,1,0],["E0527",4,3,18,3.2,1,0,0],["E0528",5,2,14,2.8,1,0,0],["E0529",1,3,18,3.4,0,0,0],["E0530",4,2,17,3.8,0,0,0],["E0531",3,2,16,3.0,0,0,0],["E0532",1,3,15,3.2,0,0,0],["E0533",3,3,16,3.6,0,0,0],["E0534",2,2,18,2.9,0,1,0],["E0535",5,2,16,2.7,1,0,0],["E0537",2,2,14,3.2,0,0,0],["E0538",2,2,15,3.9,0,0,0],["E0539",0,2,17,3.5,0,0,0],["E0540",3,2,16,4.4,0,0,0],["E0541",4,2,18,4.4,0,0,0],["E0545",1,3,17,2.0,1,1,1],["E0546",4,4,16,3.1,0,0,0],["E0547",1,2,15,3.9,0,0,0],["E0548",3,2,15,3.2,1,0,0],["E0549",2,4,14,3.9,0,0,0],["E0550",0,6,15,3.2,0,0,0],["E0551",2,2,17,null,0,0,0],["E0553",0,2,16,4.0,0,0,0],["E0554",2,3,15,3.7,0,0,0],["E0555",5,2,14,3.1,0,0,0],["E0556",4,2,14,4.8,0,0,0],["E0557",4,2,14,3.7,0,0,0],["E0559",2,2,17,3.0,1,0,1],["E0562",4,1,15,2.8,1,0,1],["E0563",4,2,16,4.1,0,0,0],["E0566",2,3,16,4.1,0,0,0],["E0567",4,2,18,2.4,1,1,1],["E0568",4,2,16,3.5,0,0,0],["E0569",0,5,14,3.2,1,0,1],["E0570",5,2,16,4.3,0,0,0],["E0571",2,1,17,3.7,1,0,0],["E0573",1,4,18,4.2,0,0,0],["E0574",3,2,16,4.0,0,0,0],["E0575",5,2,14,3.9,0,0,0],["E0576",3,3,17,2.6,1,1,1],["E0577",4,2,17,2.2,1,1,1],["E0578",2,3,16,2.9,0,0,0],["E0579",2,5,15,2.7,0,0,0],["E0580",0,2,15,2.6,1,1,0],["E0581",1,3,14,2.8,1,0,1],["E0582",5,4,14,4.2,0,0,0],["E0583",1,2,14,3.0,0,1,0],["E0584",4,4,15,3.2,0,0,0],["E0585",2,2,18,3.5,0,0,0],["E0586",5,4,16,4.2,0,0,0],["E0587",4,4,14,3.0,1,0,0],["E0588",3,3,14,4.1,0,0,0],["E0589",3,2,16,3.3,0,0,0],["E0590",0,4,18,3.7,1,0,0],["E0591",2,3,16,2.9,1,0,0],["E0592",3,2,14,4.3,0,0,0],["E0596",0,6,18,3.0,0,0,0],["E0599",1,2,17,3.5,0,0,0],["E0601",2,6,16,4.2,0,0,0],["E0602",2,1,14,3.6,0,0,0],["E0603",1,5,15,3.0,0,0,0],["E0604",3,2,17,3.2,0,0,0],["E0605",1,3,18,3.7,0,0,0],["E0606",3,1,17,4.0,0,0,0],["E0607",0,2,18,3.7,0,0,0],["E0608",0,2,18,3.2,1,0,0],["E0609",0,1,16,3.0,0,0,0],["E0610",2,2,15,2.1,1,1,1],["E0611",1,4,15,3.8,0,0,0],["E0613",5,3,17,4.5,0,0,0],["E0614",0,5,16,4.0,0,0,0],["E0615",0,2,17,4.7,0,0,0],["E0616",1,3,15,4.4,0,0,0],["E0617",3,3,16,3.8,0,0,1],["E0618",3,4,16,4.3,0,0,0],["E0620",5,4,18,3.9,0,0,0],["E0621",0,3,14,2.2,1,0,1],["E0622",3,2,17,3.2,1,0,1],["E0627",0,3,17,3.2,0,0,0],["E0628",3,2,15,2.2,1,1,1],["E0629",1,3,18,3.5,0,0,1],["E0630",1,3,17,2.8,1,0,1],["E0631",2,2,17,2.7,0,0,0],["E0632",5,2,16,3.6,0,0,0],["E0634",2,4,14,2.9,1,0,1],["E0635",0,4,14,2.9,0,0,0],["E0636",2,1,16,3.3,0,1,0],["E0637",4,1,18,3.2,0,0,0],["E0638",3,6,18,3.3,1,0,0],["E0639",4,4,16,3.8,0,0,0],["E0643",4,5,16,3.2,0,0,0],["E0645",2,2,18,1.9,1,1,0],["E0646",3,1,16,3.4,1,0,1],["E0647",1,3,15,3.8,0,0,0],["E0648",4,3,17,3.7,0,0,0],["E0649",5,2,16,3.4,0,0,0],["E0650",4,3,15,3.1,1,0,0],["E0651",3,3,17,3.0,0,1,0],["E0652",0,5,17,2.7,1,0,0],["E0653",2,3,15,4.3,0,0,0],["E0654",5,5,18,4.2,0,0,0],["E0655",4,5,16,3.8,0,0,0],["E0656",4,3,17,3.2,1,0,0],["E0657",4,6,17,3.8,0,0,0],["E0658",5,3,18,3.4,0,0,0],["E0659",1,3,15,2.4,1,1,0],["E0660",3,3,17,2.9,1,0,0],["E0661",4,5,14,1.7,1,1,0],["E0662",1,2,17,3.0,0,0,0],["E0663",1,3,14,4.2,0,0,0],["E0664",4,3,17,3.3,0,0,0],["E0665",1,3,14,2.7,1,1,0],["E0667",0,3,18,3.6,0,0,0],["E0668",1,5,15,4.2,0,0,0],["E0669",2,3,17,4.1,0,0,0],["E0670",5,4,18,3.6,0,0,0],["E0671",1,3,16,4.3,0,0,0],["E0672",4,3,16,3.8,0,0,0],["E0673",3,3,18,3.0,1,0,0],["E0674",2,1,17,2.8,0,0,0],["E0675",5,2,15,2.7,1,1,1],["E0676",0,3,15,3.8,0,0,0],["E0677",2,2,15,2.6,1,0,0],["E0680",5,1,17,2.6,1,0,1],["E0681",4,5,14,3.8,0,0,0],["E0682",4,6,16,2.7,0,0,0],["E0684",0,3,18,3.7,1,0,1],["E0685",4,3,16,2.8,1,0,0],["E0686",2,5,14,2.5,1,1,0],["E0687",1,3,18,3.3,0,0,0],["E0689",2,2,16,3.9,0,0,0],["E0690",2,3,14,2.9,1,1,0],["E0692",2,3,17,3.8,0,0,0],["E0693",3,3,14,4.1,0,0,0],["E0694",5,1,18,2.2,1,1,1],["E0695",3,2,14,3.1,1,0,0],["E0696",1,1,17,3.0,1,0,0],["E0697",2,6,14,3.0,1,0,0],["E0698",0,3,14,3.3,0,0,0],["E0699",3,4,16,3.0,0,0,1],["E0700",0,5,17,2.8,0,0,0],["E0701",3,3,16,3.0,0,0,0],["E0702",3,3,14,4.1,0,0,0],["E0703",3,3,14,3.8,0,0,0],["E0704",3,1,17,4.1,0,0,0],["E0707",0,2,17,3.5,0,0,0],["E0708",3,5,17,3.9,0,0,1],["E0709",2,6,17,3.8,0,0,0],["E0710",0,1,14,3.1,0,0,0],["E0711",4,4,15,3.3,0,0,0],["E0712",4,3,16,3.7,0,0,0],["E0713",3,1,18,2.3,1,0,0],["E0714",1,5,17,2.6,1,1,0],["E0715",2,5,14,2.5,1,0,1],["E0716",0,2,15,3.1,0,0,0],["E0717",2,2,16,2.9,1,0,0],["E0718",1,3,14,3.8,0,0,0],["E0719",3,2,17,3.1,1,0,0],["E0720",5,1,15,2.9,0,0,0],["E0721",4,6,17,2.8,1,0,0],["E0722",2,2,15,2.4,1,0,1],["E0724",2,2,16,4.5,0,0,0],["E0725",0,1,15,2.9,0,0,0],["E0726",3,6,15,4.0,0,0,0],["E0728",3,4,16,2.8,0,0,0],["E0729",3,2,17,4.7,0,0,0],["E0730",5,3,14,3.8,0,0,0],["E0731",0,3,16,4.0,0,0,0],["E0734",2,3,14,2.5,1,1,0],["E0736",0,2,15,3.4,1,0,0],["E0737",2,3,15,3.4,1,0,0],["E0738",3,2,15,2.9,1,0,1],["E0739",1,2,18,2.2,1,1,0],["E0741",0,3,18,3.5,0,0,0],["E0742",2,6,16,4.0,0,0,0],["E0744",3,6,18,3.2,0,0,0],["E0746",0,2,16,3.8,0,0,0],["E0747",3,2,17,4.2,0,0,0],["E0748",4,3,18,3.7,0,0,0],["E0749",1,3,17,null,0,0,0],["E0752",0,2,14,3.9,0,0,0],["E0754",2,1,17,2.7,1,0,0],["E0755",1,2,14,2.3,1,1,1],["E0756",4,2,15,3.5,0,0,0],["E0757",2,3,17,3.8,0,0,0],["E0758",0,3,16,3.1,1,1,0],["E0759",3,2,15,2.7,1,1,1],["E0760",3,5,18,3.1,1,0,0],["E0761",0,5,18,3.3,0,0,0],["E0762",0,2,18,3.7,0,0,0],["E0763",2,2,14,4.0,0,0,0],["E0765",2,3,14,3.4,0,0,0],["E0766",0,1,18,3.5,0,0,0],["E0767",5,6,16,4.0,0,0,0],["E0768",1,2,14,3.8,0,0,0],["E0769",0,5,15,3.3,0,0,0],["E0770",2,3,17,4.1,0,0,0],["E0771",2,3,16,3.9,0,0,0],["E0772",2,1,15,4.7,0,0,0],["E0773",5,2,14,3.9,0,0,0],["E0774",5,1,18,3.6,0,0,0],["E0776",3,1,18,2.7,0,0,0],["E0777",0,1,16,2.8,1,0,1],["E0778",5,1,17,2.1,1,0,0],["E0780",1,2,14,3.1,1,0,0],["E0781",5,4,15,3.3,0,0,0],["E0782",5,1,16,3.5,0,0,0],["E0783",1,5,18,3.2,0,0,0],["E0787",3,2,16,3.1,1,0,0],["E0788",5,3,14,2.8,1,0,0],["E0789",0,1,18,3.1,0,0,0],["E0790",4,3,18,3.3,0,0,0],["E0791",0,2,17,3.6,0,0,0],["E0793",3,2,14,4.0,0,0,0],["E0794",3,2,15,4.2,0,0,0],["E0795",0,2,14,4.7,0,0,0],["E0796",3,4,16,3.6,0,0,1],["E0799",3,2,15,4.0,0,0,0],["E0800",1,2,15,3.8,0,0,0],["E0801",5,3,16,3.0,0,0,0],["E0802",3,2,18,4.1,0,0,0],["E0803",0,3,14,2.7,1,0,0],["E0804",4,3,16,3.8,1,0,0],["E0805",1,1,15,4.2,0,0,0],["E0806",0,2,15,3.9,0,0,0],["E0807",4,3,16,3.5,0,0,0],["E0808",0,5,17,3.2,0,0,0],["E0809",0,2,15,4.2,0,0,0],["E0811",4,6,14,3.3,0,0,0],["E0812",3,6,16,2.7,1,0,1],["E0814",2,2,15,2.2,1,0,0],["E0815",3,3,18,3.1,0,0,0],["E0816",2,3,18,3.4,0,0,0],["E0817",0,2,15,null,1,0,0],["E0818",3,2,16,2.8,1,0,0],["E0819",1,2,15,3.9,0,0,0],["E0820",2,3,14,3.6,0,0,0],["E0821",5,3,15,3.1,0,0,0],["E0822",4,2,17,3.6,1,1,1],["E0823",0,1,18,2.7,0,0,1],["E0824",4,1,14,3.4,0,0,0],["E0825",3,3,15,3.7,0,0,0],["E0826",2,5,15,2.4,1,1,1],["E0827",3,3,15,2.1,1,1,1],["E0828",4,1,15,3.2,0,0,0],["E0829",1,1,14,3.7,0,0,0],["E0830",3,1,18,null,1,0,0],["E0831",0,2,17,2.8,1,0,0],["E0832",0,3,16,4.2,0,0,0],["E0833",1,1,17,3.7,0,0,1],["E0834",4,3,16,3.2,1,1,0],["E0835",4,1,18,2.7,1,0,0],["E0836",3,1,18,3.2,0,0,0],["E0837",3,5,16,3.6,0,0,0],["E0838",4,2,16,4.3,0,0,0],["E0839",0,1,17,2.8,1,0,0],["E0840",1,1,16,3.4,0,0,0],["E0842",0,3,14,4.2,0,0,0],["E0843",0,2,14,3.4,1,0,0],["E0844",2,3,18,3.0,0,0,0],["E0845",2,1,17,3.0,1,0,0],["E0846",4,3,18,3.1,0,0,0],["E0847",2,2,18,4.0,0,0,0],["E0848",3,4,16,3.4,0,0,0],["E0849",5,5,18,3.2,1,0,0],["E0850",3,3,16,3.3,1,0,0],["E0851",2,3,14,4.5,0,0,0],["E0852",2,2,16,3.8,0,0,0],["E0853",3,2,18,3.7,0,0,0],["E0854",0,2,17,null,0,0,0],["E0855",4,4,16,3.3,0,0,0],["E0856",2,1,15,3.6,0,0,1],["E0857",1,2,15,3.8,0,0,0],["E0858",3,2,17,3.4,0,0,0],["E0859",4,2,14,3.9,0,0,0],["E0860",4,5,14,3.6,0,0,0],["E0862",2,2,15,3.0,0,0,0],["E0863",4,2,15,2.8,1,1,1],["E0865",3,4,16,3.6,0,0,0],["E0866",1,1,17,4.3,1,0,1],["E0868",5,1,14,3.9,0,0,0],["E0869",1,3,18,2.4,1,1,1],["E0870",0,5,18,3.7,0,0,0],["E0871",5,1,17,4.2,0,0,0],["E0872",0,2,17,4.5,0,0,0],["E0874",0,1,17,4.6,0,0,0],["E0877",3,3,14,3.3,0,0,0],["E0878",4,3,18,2.2,1,1,1],["E0879",5,3,16,2.6,0,0,0],["E0880",1,4,14,2.6,1,1,0],["E0881",1,4,15,3.3,0,0,1],["E0882",5,6,14,3.6,0,0,0],["E0883",5,3,14,3.3,0,0,0],["E0884",0,3,15,4.1,0,0,0],["E0885",1,1,14,4.4,0,0,0],["E0886",1,3,14,3.5,0,0,0],["E0887",2,2,14,3.6,0,0,0],["E0889",3,3,17,2.6,0,0,0],["E0891",4,1,15,2.4,1,0,0],["E0892",1,3,15,3.5,0,0,0],["E0894",1,3,16,3.1,0,0,0],["E0895",2,3,15,3.5,0,0,0],["E0896",4,1,18,3.4,1,0,1],["E0897",3,1,18,3.7,0,0,0],["E0898",5,5,15,3.2,0,0,0],["E0899",0,4,18,2.7,1,1,0],["E0900",4,2,17,3.4,0,0,0],["E0901",0,1,14,4.0,0,0,0],["E0902",3,1,17,3.7,0,0,0],["E0903",4,3,16,4.2,0,0,0],["E0904",3,3,18,3.9,0,0,0],["E0906",3,4,16,4.3,0,0,0],["E0907",3,2,18,3.9,0,0,0],["E0908",4,3,16,3.0,0,0,0],["E0909",1,3,17,2.6,1,0,0],["E0910",2,2,16,2.9,0,0,1],["E0911",2,2,14,3.0,1,0,1],["E0912",0,2,18,2.4,1,1,1],["E0913",0,4,18,3.3,0,0,0],["E0914",0,1,14,3.0,0,0,1],["E0915",1,2,14,3.9,0,0,0],["E0916",2,1,15,3.3,0,0,0],["E0917",3,1,16,4.0,0,0,0],["E0918",4,2,17,2.8,0,0,1],["E0919",3,3,14,3.4,0,0,0],["E0920",2,3,16,null,0,0,0],["E0921",3,2,15,4.4,0,0,0],["E0922",5,2,15,3.9,0,0,0],["E0923",4,1,14,2.9,1,0,0],["E0924",1,2,18,3.7,0,0,0],["E0925",4,1,18,3.6,0,0,0],["E0927",2,2,15,3.8,0,0,0],["E0928",1,3,16,3.5,0,0,0],["E0929",1,1,17,3.1,0,0,0],["E0930",0,2,16,3.4,0,0,0],["E0931",1,1,14,3.7,1,0,0],["E0934",0,4,14,2.5,1,1,1],["E0935",0,2,18,2.6,1,0,1],["E0936",2,2,17,3.2,1,0,0],["E0938",4,2,18,2.9,1,0,0],["E0939",2,1,14,3.7,0,0,0],["E0940",0,3,15,null,0,0,0],["E0941",0,3,17,4.2,0,0,0],["E0942",3,2,16,4.3,0,0,0],["E0943",1,1,18,3.1,1,0,0],["E0944",1,2,14,4.0,0,0,0],["E0945",2,5,14,3.9,0,0,0],["E0946",3,3,15,3.4,0,0,0],["E0947",5,2,15,3.5,1,0,0],["E0948",4,3,14,3.9,0,0,0],["E0949",1,3,16,3.0,0,0,1],["E0950",2,5,14,4.2,0,0,0],["E0951",1,2,17,3.6,0,0,0],["E0952",0,2,16,4.4,0,0,0],["E0954",1,2,14,3.4,0,0,0],["E0955",0,1,18,2.8,0,0,0],["E0957",3,2,18,2.8,1,0,0],["E0959",0,4,15,2.9,0,0,0],["E0960",1,2,17,3.5,0,0,0],["E0962",0,3,15,3.2,0,0,0],["E0963",0,3,18,3.6,0,0,0],["E0964",3,1,16,3.8,0,0,0],["E0965",4,2,15,4.0,0,0,0],["E0966",2,3,14,3.4,1,0,0],["E0967",3,2,18,2.8,1,0,0],["E0968",2,3,14,4.1,0,0,0],["E0969",4,2,14,3.0,0,0,0],["E0970",0,2,17,3.3,0,0,1],["E0971",2,1,15,3.5,0,0,0],["E0972",0,2,14,3.9,0,0,0],["E0973",3,3,17,4.1,0,0,0],["E0974",4,2,14,4.1,0,0,0],["E0975",0,5,15,4.4,0,0,0],["E0976",5,1,16,5.0,0,0,0],["E0978",4,6,15,2.3,1,1,0],["E0979",3,2,17,2.8,1,0,0],["E0981",5,4,18,2.9,1,0,0],["E0982",2,1,18,null,0,0,0],["E0983",2,4,17,3.9,0,0,0],["E0984",3,4,17,3.7,0,0,0],["E0985",3,4,16,3.5,0,0,0],["E0986",1,4,18,2.6,1,0,0],["E0987",2,3,14,2.9,1,1,1],["E0988",1,2,17,3.1,0,0,0],["E0989",0,2,15,3.2,1,0,0],["E0990",4,1,14,4.0,0,0,1],["E0992",4,3,16,3.9,0,0,0],["E0993",4,2,17,3.7,0,0,0],["E0994",0,1,16,4.4,0,0,0],["E0995",1,3,15,3.3,0,0,0],["E0996",1,3,15,4.7,0,0,0],["E0998",0,2,15,3.7,0,0,0],["E1001",4,2,17,3.1,0,0,0],["E1002",0,2,18,2.2,1,0,0],["E1003",4,3,14,2.2,1,1,1],["E1004",5,2,16,2.8,1,1,1],["E1006",1,3,15,2.7,0,1,0],["E1007",3,2,14,4.2,0,0,0],["E1008",3,1,14,4.2,0,0,0],["E1009",4,2,15,3.8,0,0,0],["E1010",4,2,17,4.0,0,0,0],["E1011",4,3,18,4.3,0,0,0],["E1013",4,4,18,2.9,1,0,0],["E1014",4,1,16,2.0,1,1,1],["E1016",0,3,17,2.5,1,0,0],["E1017",1,5,16,3.3,0,0,0],["E1018",0,2,17,3.1,1,0,0],["E1019",4,3,18,3.2,1,0,0],["E1020",3,5,18,3.0,0,0,0],["E1022",3,6,15,3.2,0,0,0],["E1023",3,1,15,2.9,1,0,0],["E1025",5,3,15,3.8,0,0,0],["E1026",4,4,16,3.8,0,0,0],["E1027",5,4,18,3.4,0,0,0],["E1028",0,5,16,3.6,0,0,0],["E1029",4,1,18,3.3,0,0,0],["E1030",4,4,16,4.0,0,0,0],["E1031",0,5,17,2.8,0,0,1],["E1033",4,1,18,3.8,1,0,0],["E1036",2,2,16,3.4,0,0,0],["E1037",2,3,14,2.4,1,1,1],["E1038",3,3,16,3.5,0,0,1],["E1039",3,3,14,3.1,0,0,0],["E1040",0,2,14,2.8,1,0,0],["E1041",1,2,14,3.5,1,0,0],["E1042",4,2,14,2.9,1,0,0],["E1043",4,2,18,4.0,0,0,0],["E1044",4,2,17,4.0,0,0,0],["E1045",0,1,14,4.5,0,0,0],["E1046",0,3,16,3.4,0,0,0],["E1047",2,4,15,3.9,0,0,0],["E1048",1,3,15,4.6,0,0,0],["E1049",4,2,18,4.3,0,0,0],["E1053",0,6,18,1.9,1,0,0],["E1054",3,1,14,2.0,1,1,0],["E1055",0,2,17,3.6,0,0,0],["E1056",4,5,17,3.0,0,0,0],["E1057",4,2,16,3.7,0,0,0],["E1058",3,5,17,3.4,0,0,0],["E1059",5,3,14,2.1,1,1,1],["E1060",1,2,16,3.7,0,0,0],["E1062",0,2,14,3.4,0,0,0],["E1064",0,2,16,4.0,0,0,0],["E1065",2,2,18,3.2,1,0,1],["E1066",1,2,17,3.9,0,0,0],["E1067",5,3,14,3.0,1,0,0],["E1068",1,4,17,4.3,0,0,0],["E1069",0,3,17,4.6,0,0,0],["E1070",2,2,18,3.3,0,0,0],["E1071",0,3,16,3.5,0,0,0],["E1074",5,2,18,3.0,0,0,0],["E1075",3,2,16,2.9,1,0,1],["E1076",0,2,18,null,1,0,0],["E1077",4,2,15,2.4,1,0,0],["E1078",3,4,18,3.6,0,0,0],["E1079",3,3,17,3.8,0,0,0],["E1080",3,1,16,3.4,0,0,0],["E1081",0,2,14,3.0,1,0,0],["E1082",0,3,15,3.7,0,0,0],["E1083",1,1,14,4.6,0,0,0],["E1084",5,4,18,3.5,0,0,0],["E1085",3,1,14,3.8,0,0,0],["E1086",1,2,15,4.6,0,0,0],["E1087",4,3,18,3.3,0,0,0],["E1088",5,2,15,3.4,0,0,0],["E1089",3,5,17,4.0,0,0,0],["E1090",2,2,18,3.5,0,0,0],["E1093",3,2,16,2.8,0,0,0],["E1096",5,6,14,3.1,0,0,0],["E1097",5,2,17,3.1,0,0,0],["E1099",4,2,16,3.1,1,0,0],["E1100",5,3,17,3.1,1,0,0],["E1101",0,2,18,4.0,0,0,0],["E1102",4,2,15,3.4,0,0,0],["E1104",2,1,15,3.1,0,0,0],["E1105",2,2,15,3.8,0,0,0],["E1106",4,1,15,4.2,0,0,0],["E1107",0,2,15,3.7,0,0,0],["E1108",4,2,18,3.6,0,0,0],["E1110",4,3,18,3.1,1,0,0],["E1111",0,4,14,2.5,1,1,1],["E1112",1,3,17,2.7,0,1,0],["E1113",0,4,17,3.4,0,0,0],["E1115",3,3,17,2.1,1,1,0],["E1116",0,3,18,2.9,1,0,0],["E1117",4,2,14,3.0,0,0,0],["E1118",4,4,14,2.6,1,1,0],["E1120",5,2,18,3.5,0,0,0],["E1121",3,1,18,2.5,1,1,1],["E1122",4,1,17,3.4,0,0,0],["E1123",3,2,18,3.4,0,0,0],["E1124",3,3,15,4.2,0,0,0],["E1125",5,3,17,3.5,0,0,0],["E1126",3,3,16,3.9,0,0,0],["E1127",4,2,17,4.8,0,0,0],["E1128",3,1,17,2.3,1,0,1],["E1131",0,3,14,2.3,1,1,1],["E1133",5,2,16,3.3,0,0,0],["E1134",5,1,14,3.7,0,0,0],["E1135",0,1,18,3.2,1,0,0],["E1137",0,2,14,3.4,1,0,0],["E1138",4,1,16,3.0,0,0,0],["E1139",0,1,15,3.6,0,1,0],["E1140",0,3,14,4.5,0,0,0],["E1142",3,1,17,3.8,0,0,0],["E1143",5,2,16,3.5,0,0,0],["E1144",3,2,16,2.4,1,0,0],["E1145",1,2,17,2.7,1,0,0],["E1147",5,2,14,2.1,1,1,1],["E1148",0,1,18,2.6,0,0,1],["E1149",3,3,17,3.7,0,0,0],["E1150",1,2,15,2.6,1,0,1],["E1152",3,1,16,3.3,0,0,0],["E1153",5,1,14,2.4,1,1,1],["E1154",4,4,17,3.3,1,0,0],["E1155",0,1,14,4.7,0,0,0],["E1156",2,2,18,3.3,0,0,0],["E1157",0,4,14,2.4,1,0,0],["E1158",4,2,16,3.5,0,0,0],["E1159",5,2,17,3.8,0,0,0],["E1160",5,3,15,3.3,1,0,0],["E1161",1,2,15,3.2,0,0,0],["E1162",2,4,14,3.8,0,0,0],["E1163",4,5,15,3.4,0,0,0],["E1164",3,1,14,3.5,0,0,1],["E1165",3,1,16,3.6,0,0,0],["E1167",0,4,14,3.1,0,0,0],["E1168",2,2,14,3.3,0,0,0],["E1170",3,4,15,3.3,0,0,0],["E1171",4,2,15,4.2,0,0,0],["E1172",4,4,18,3.0,1,0,0],["E1174",0,5,15,3.1,0,0,0],["E1175",1,1,14,3.0,0,0,1],["E1176",3,1,14,3.6,0,0,0],["E1177",0,4,15,3.0,1,0,1],["E1178",5,2,14,4.0,0,0,0],["E1179",4,2,16,3.2,0,0,0],["E1180",5,4,17,2.9,1,0,0],["E1181",4,1,17,3.1,0,0,0],["E1182",5,3,15,2.7,1,0,1],["E1183",3,3,14,3.0,1,0,0],["E1186",5,2,16,4.7,0,0,0],["E1188",4,2,17,4.4,0,0,0],["E1189",4,3,14,3.4,0,0,0],["E1190",2,3,18,3.4,0,0,0],["E1191",0,3,14,3.7,0,0,0],["E1192",2,6,18,4.9,0,0,0],["E1193",4,3,18,3.3,1,0,0],["E1194",3,1,16,2.7,1,0,0],["E1195",0,2,16,2.3,1,1,1],["E1196",1,2,14,3.1,1,0,1],["E1198",4,2,16,2.9,1,0,0],["E1199",0,2,14,4.0,0,0,0],["E1200",4,2,16,3.1,0,0,0],["E1201",1,3,18,4.2,0,0,0],["E1202",4,1,14,3.0,1,0,0],["E1203",0,3,16,3.8,0,0,0],["E1204",0,3,17,4.3,0,0,0],["E1205",3,2,14,4.0,0,0,0],["E1206",5,2,18,2.3,1,0,1],["E1208",3,2,16,2.4,1,1,0],["E1209",4,3,15,2.6,1,0,0],["E1210",0,2,14,3.7,1,0,1],["E1211",1,4,16,3.4,0,0,0],["E1212",3,2,14,2.8,0,0,1],["E1214",3,2,17,3.0,0,0,0],["E1215",2,2,18,3.4,0,0,0],["E1216",1,3,17,3.4,0,0,0],["E1217",4,3,16,2.8,0,0,0],["E1218",3,2,15,3.0,0,0,0],["E1219",3,3,14,4.5,0,0,0],["E1220",4,2,16,3.8,0,0,0],["E1221",1,1,18,4.1,0,0,0],["E1222",0,3,14,3.0,0,0,0],["E1223",3,2,15,2.6,1,0,0],["E1224",0,3,15,3.4,0,0,0],["E1225",0,3,14,2.7,1,0,0],["E1227",5,2,17,2.8,1,0,0],["E1228",5,2,17,4.1,0,0,0],["E1229",2,1,18,1.9,1,1,0],["E1230",1,5,18,3.6,0,0,0],["E1232",5,3,14,3.9,0,0,0],["E1234",5,1,14,3.6,0,0,0],["E1236",0,3,16,4.4,0,0,0],["E1237",1,4,18,5.0,0,0,0],["E1241",0,3,15,2.7,1,1,1],["E1242",5,6,15,2.5,1,0,0],["E1243",4,3,15,1.9,1,1,1],["E1244",1,1,15,4.4,0,0,1],["E1245",5,5,15,4.0,0,0,0],["E1247",0,1,16,2.8,1,1,1],["E1248",4,2,18,null,1,0,0],["E1249",2,2,14,3.0,0,0,1],["E1250",4,2,18,3.7,0,0,0],["E1251",2,6,15,3.1,1,0,0],["E1252",0,2,18,3.5,0,0,0],["E1253",4,1,18,3.9,0,0,0],["E1254",0,2,17,2.9,1,0,0],["E1255",5,2,18,4.3,0,0,0],["E1257",5,2,16,3.4,0,0,0],["E1258",4,1,18,2.4,1,0,0],["E1259",3,4,14,2.7,1,0,0],["E1260",5,3,15,3.4,0,0,0],["E1262",2,1,18,3.9,0,0,0],["E1263",0,2,18,3.2,1,0,0],["E1264",0,1,14,3.1,0,0,1],["E1265",5,3,16,2.9,0,0,0],["E1266",3,3,14,2.9,0,0,0],["E1268",1,2,16,2.7,1,0,1],["E1269",1,2,15,3.9,0,0,0],["E1270",3,3,18,3.2,0,0,0],["E1271",1,4,14,3.8,0,0,0],["E1274",2,2,15,3.6,0,0,0],["E1275",4,3,18,3.9,0,0,0],["E1276",4,3,14,3.4,1,0,0],["E1277",2,2,15,3.9,0,0,0],["E1278",0,2,14,3.9,0,0,0],["E1279",3,2,18,2.9,0,0,0],["E1280",0,1,18,3.0,0,0,1],["E1281",3,3,14,4.5,0,0,0],["E1282",3,3,17,3.5,0,0,0],["E1283",5,3,14,3.8,0,0,0],["E1285",2,5,16,3.2,0,0,0],["E1286",1,4,17,4.0,0,0,0],["E1287",5,2,15,3.0,0,0,0],["E1288",5,3,14,3.1,1,0,0],["E1289",2,1,15,3.5,0,0,0],["E1290",2,3,14,3.3,0,0,0],["E1291",3,4,15,3.6,1,0,0],["E1292",3,4,17,3.5,0,0,0],["E1293",0,3,15,2.7,1,1,0],["E1294",3,1,18,3.3,0,0,0],["E1295",0,2,18,4.5,0,0,0],["E1296",4,3,15,3.7,0,0,0],["E1297",3,3,17,3.3,0,0,0],["E1298",0,2,17,4.2,0,0,0],["E1299",0,1,15,3.1,0,0,0],["E1300",5,2,15,4.6,0,0,0],["E1301",0,2,15,4.4,0,0,0],["E1302",4,2,18,2.8,0,0,0],["E1304",4,1,15,3.3,0,0,0],["E1305",2,3,16,3.3,1,0,1],["E1306",1,2,15,2.9,0,0,0],["E1307",1,2,16,3.0,1,1,0],["E1308",1,1,16,3.6,0,0,0],["E1310",4,1,14,3.3,0,0,0],["E1311",3,2,18,4.2,0,0,0],["E1312",3,2,18,4.2,0,0,0],["E1314",3,3,14,2.5,1,1,0],["E1317",0,5,18,2.2,1,0,0],["E1318",2,1,17,3.1,0,0,0],["E1319",5,1,16,3.2,0,0,0],["E1320",4,2,16,2.9,1,0,0],["E1321",0,4,18,3.2,0,0,0],["E1322",4,3,14,null,1,1,1],["E1323",4,4,17,2.4,0,1,0],["E1324",2,2,18,3.8,0,0,0],["E1325",0,4,15,3.3,0,0,0],["E1328",3,1,17,2.9,1,0,0],["E1329",0,2,17,3.3,0,0,0],["E1330",1,3,18,null,1,0,0],["E1331",0,3,17,3.4,1,0,0],["E1332",5,2,15,2.5,1,1,0],["E1333",4,2,18,4.5,0,0,0],["E1335",4,4,16,3.9,0,0,0],["E1336",3,3,18,3.0,1,0,0],["E1337",3,2,16,4.0,0,0,0],["E1338",0,3,16,4.5,0,0,0],["E1340",4,1,14,3.2,1,0,0],["E1341",0,3,15,2.7,0,0,0],["E1342",0,2,16,3.5,1,0,1],["E1343",0,3,17,2.4,1,0,1],["E1344",3,1,17,2.0,1,0,1],["E1345",3,5,16,4.0,0,0,0],["E1346",4,3,18,3.7,0,0,0],["E1347",5,3,15,3.4,1,1,0],["E1348",3,6,16,3.1,0,0,0],["E1349",0,2,18,2.8,1,0,0],["E1350",5,1,17,4.0,0,0,0],["E1351",3,6,17,3.9,0,0,0],["E1352",2,2,18,3.3,0,0,0],["E1353",1,3,14,3.6,0,0,0],["E1354",3,2,16,3.4,0,0,0],["E1356",0,5,16,3.3,0,0,0],["E1357",2,3,18,2.3,1,0,1],["E1359",3,3,15,3.3,0,0,1],["E1360",2,6,17,3.5,0,0,0],["E1361",0,1,15,2.4,1,1,1],["E1362",3,3,15,2.5,1,1,0],["E1363",2,3,18,3.7,0,0,0],["E1365",2,2,16,2.9,0,0,0],["E1366",1,2,16,2.0,1,1,0],["E1367",0,2,14,3.3,1,0,0],["E1368",3,2,14,4.0,0,0,0],["E1369",0,3,15,3.7,0,0,0],["E1370",5,4,14,3.7,0,0,0],["E1371",4,1,18,2.9,1,0,0],["E1372",4,2,17,3.2,0,0,1],["E1373",4,3,15,3.2,0,0,0],["E1374",5,1,15,4.2,0,0,0],["E1375",2,6,18,4.6,0,0,0],["E1377",3,4,15,1.9,1,1,1],["E1381",2,2,16,3.2,1,0,0],["E1382",5,2,15,2.6,0,0,0],["E1383",3,2,16,3.0,1,0,0],["E1384",4,2,15,3.1,1,0,0],["E1385",0,3,14,3.9,0,0,0],["E1386",5,1,16,null,0,0,0],["E1387",3,3,14,3.5,0,0,0],["E1388",2,6,18,3.8,0,0,0],["E1389",0,2,17,4.1,0,0,0],["E1390",5,2,18,5.0,0,0,0],["E1396",1,3,14,3.9,0,0,0],["E1398",4,2,18,2.6,1,0,0],["E1399",4,2,18,3.7,0,0,0],["E1400",3,3,17,2.1,1,0,0],["E1402",2,4,17,2.0,1,1,0],["E1405",0,4,14,3.2,0,0,0],["E1406",2,2,16,3.5,0,0,0],["E1407",0,3,15,3.3,0,0,0],["E1408",2,3,17,3.0,0,0,0],["E1409",2,6,17,2.0,1,0,1],["E1410",4,5,15,2.6,1,0,0],["E1411",1,1,14,2.7,1,0,0],["E1412",5,1,16,3.6,0,0,0],["E1413",5,5,14,3.0,1,0,0],["E1414",1,2,18,3.4,0,0,0],["E1415",0,4,14,3.2,0,0,0],["E1416",3,5,16,3.6,0,0,0],["E1417",4,2,16,3.9,0,0,0],["E1418",0,2,15,3.7,0,0,0],["E1419",0,2,15,4.1,0,0,0],["E1420",0,1,14,3.9,0,0,0],["E1421",3,1,14,2.5,1,0,0],["E1422",0,3,18,2.3,0,1,1],["E1423",0,2,16,2.2,1,1,1],["E1424",4,2,14,4.4,0,0,0],["E1425",1,3,16,3.1,0,0,0],["E1426",4,3,15,3.1,1,0,0],["E1427",4,3,15,2.6,0,1,0],["E1428",5,2,17,2.9,0,0,0],["E1429",3,4,16,3.6,0,0,0],["E1431",2,2,17,3.1,0,0,1],["E1432",3,1,16,3.7,1,0,1],["E1433",3,1,14,3.9,0,0,0],["E1434",0,1,17,4.5,0,0,0],["E1435",3,4,18,3.4,0,0,0],["E1436",4,5,15,3.7,0,0,0],["E1437",0,4,15,3.9,0,0,0],["E1438",4,6,16,null,0,0,0],["E1439",3,3,16,null,0,0,0],["E1440",3,4,15,3.1,0,0,0],["E1441",4,2,16,2.9,1,0,1],["E1442",1,3,15,4.0,0,0,0],["E1443",3,3,17,2.8,0,0,1],["E1445",1,2,18,3.0,1,1,0],["E1446",3,1,14,3.4,0,0,0],["E1447",2,2,14,3.4,0,0,0],["E1448",5,2,15,4.5,0,0,0],["E1450",4,4,14,3.8,0,0,0]],"adm":[[0,1,51],[0,2,106],[0,3,82],[0,4,40],[0,5,20],[0,6,7],[1,1,31],[1,2,66],[1,3,55],[1,4,22],[1,5,13],[1,6,1],[2,1,33],[2,2,69],[2,3,59],[2,4,14],[2,5,11],[2,6,18],[3,1,60],[3,2,94],[3,3,77],[3,4,27],[3,5,16],[3,6,13],[4,1,47],[4,2,92],[4,3,81],[4,4,29],[4,5,17],[4,6,11],[5,1,32],[5,2,68],[5,3,53],[5,4,18],[5,5,11],[5,6,6]]};
+// Pega aquí el enlace de "Publicar en la web" si lo consigues (si queda vacío se muestra la captura del tablero)
+const PBI_URL = "";
+const META = { abs: 0.85, ret: 0.85, des: 0.15, prom: 3.5, al: 120, pre: 0.5, cob: 0.35 };
+const nf = n => n.toLocaleString('es-CO');
+const pc = v => v == null ? '—' : (v * 100).toFixed(1).replace('.', ',') + ' %';
+const sem = (v, m, bajo) => v == null ? 'nu' : bajo ? (v <= m ? 'ok' : v <= m * 1.1 ? 'am' : 'ko') : (v >= m ? 'ok' : v >= m * 0.9 ? 'am' : 'ko');
+const CLS = { ok: ['bg-emerald-50 border-emerald-500', 'bg-emerald-500', '🟢 Cumple'], am: ['bg-amber-50 border-amber-500', 'bg-amber-500', '🟡 Cerca'], ko: ['bg-rose-50 border-rose-500', 'bg-rose-500', '🔴 No cumple'], nu: ['bg-slate-50 border-slate-300', 'bg-slate-300', 'Sin datos'] };
+
+function sincronizarFacultad() {
+    const fac = document.getElementById('fFacultad').value;
+    const sel = document.getElementById('fPrograma');
+    const idx = DATA.progs.map((p, i) => i).filter(i => fac === 'TODAS' || DATA.facs[DATA.pf[i]] === fac);
+    sel.innerHTML = '<option value="TODOS">Todos los Programas (' + idx.length + ')</option>' + idx.map(i => `<option value="${DATA.progs[i]}">${DATA.progs[i]}</option>`).join('');
+    recalcularTablero();
+}
+
+function calc(f) {
+    const r = DATA.rows.filter(f.fil), ra = DATA.adm.filter(x => f.filAdm(x));
+    const regla = document.getElementById('fRegla').value;
+    const k = regla === 'nue' ? 6 : 5;
+    const coh = r.length, des = r.reduce((s, x) => s + x[7], 0);
+    const adm = ra.reduce((s, x) => s + x[2], 0);
+    const cp = r.filter(x => x[4] != null), prom = cp.length ? cp.reduce((s, x) => s + x[4], 0) / cp.length : null;
+    const al = r.reduce((s, x) => s + x[k], 0), vp = r.reduce((s, x) => s + (x[k] && x[7] ? 1 : 0), 0);
+    return { coh, des, adm, prom, al, vp, regla,
+        abs: adm ? coh / adm : null, ret: coh ? (coh - des) / coh : null, dp: coh ? des / coh : null,
+        pre: al ? vp / al : null, cob: des ? vp / des : null };
+}
+
+function filtros() {
+    const fac = document.getElementById('fFacultad').value;
+    const prog = document.getElementById('fPrograma').value;
+    const est = document.getElementById('fEstrato').value;
+    const okP = pi => (prog === 'TODOS' || DATA.progs[pi] === prog) && (fac === 'TODAS' || DATA.facs[DATA.pf[pi]] === fac);
+    const okE = e => est === 'TODOS' || String(e) === est;
+    return { fac, prog, est, fil: x => okP(x[1]) && okE(x[2]), filAdm: x => okP(x[0]) && okE(x[1]) };
+}
+
+function recalcularTablero() {
+    const f = filtros(), c = calc(f), nom = c.regla === 'nue' ? 'regla nueva' : 'regla actual';
+    const tarjetas = [
+        ['1. Absorción', pc(c.abs), sem(c.abs, META.abs), `${nf(c.coh)} / ${nf(c.adm)} admitidos · meta ≥ 85 %`],
+        ['2. Retención 2025-2', pc(c.ret), sem(c.ret, META.ret), `${nf(c.coh - c.des)} de ${nf(c.coh)} · meta ≥ 85 %`],
+        ['3. Deserción', pc(c.dp), sem(c.dp, META.des, 1), `${nf(c.des)} desertores de ${nf(c.coh)} · meta ≤ 15 %`],
+        ['4. Promedio cohorte', c.prom == null ? '—' : c.prom.toFixed(2).replace('.', ','), sem(c.prom, META.prom), 'Escala 0–5 · meta ≥ 3,5'],
+        ['5. Alertados (' + nom + ')', nf(c.al), c.al ? sem(c.al, META.al, 1) : 'nu', 'Capacidad de Bienestar ≤ 120'],
+        ['6. Precisión (' + nom + ')', pc(c.pre), sem(c.pre, META.pre), `${nf(c.vp)} desertores / ${nf(c.al)} alertados · meta ≥ 50 %`],
+        ['7. Cobertura (' + nom + ')', pc(c.cob), sem(c.cob, META.cob), `${nf(c.vp)} detectados / ${nf(c.des)} desertores · meta ≥ 35 %`]
+    ];
+    document.getElementById('kpiGrid').innerHTML = tarjetas.map(t => {
+        const k = CLS[t[2]];
+        return `<div class="${k[0]} border-2 rounded-xl p-4 text-center">
+            <p class="text-xs font-semibold uppercase text-slate-600 flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 rounded-full ${k[1]} inline-block"></span>${t[0]}</p>
+            <p class="text-2xl md:text-3xl font-bold text-slate-900 my-1">${t[1]}</p>
+            <p class="text-xs text-slate-600">${t[3]}</p><p class="text-[11px] font-semibold text-slate-500 mt-1">${k[2]}</p></div>`;
+    }).join('');
+    document.getElementById('resumenFiltro').innerText =
+        `Filtro activo → Facultad: ${f.fac === 'TODAS' ? 'todas' : f.fac} | Programa: ${f.prog === 'TODOS' ? 'todos' : f.prog} | Estrato: ${f.est === 'TODOS' ? 'todos' : f.est} → ${nf(c.coh)} en cohorte, ${nf(c.coh - c.des)} retenidos, ${nf(c.des)} desertores`;
+    // barras por programa (respetan facultad y estrato; ordenadas de mayor a menor porcentaje)
+    const cont = document.getElementById('barrasProgramas'); cont.innerHTML = '';
+    const listaProgramas = [];
+    DATA.progs.forEach((p, pi) => {
+        if (f.prog !== 'TODOS' && p !== f.prog) return;
+        if (f.fac !== 'TODAS' && DATA.facs[DATA.pf[pi]] !== f.fac) return;
+        const rr = DATA.rows.filter(x => x[1] === pi && (f.est === 'TODOS' || String(x[2]) === f.est));
+        const n = rr.length, d = rr.reduce((s, x) => s + x[7], 0), v = n ? d / n : 0;
+        listaProgramas.push({ p, n, d, v });
+    });
+    // Ordenar de mayor a menor por tasa de deserción
+    listaProgramas.sort((a, b) => b.v - a.v);
+    listaProgramas.forEach(item => {
+        cont.innerHTML += `<div><div class="flex justify-between font-medium mb-1"><span>${item.p} <span class="text-slate-400 font-normal">(${item.d}/${item.n})</span></span><span class="font-bold text-slate-800">${pc(item.n ? item.v : null)}</span></div>
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="${item.v > META.des ? 'bg-amber-500' : 'bg-teal-600'} h-3 rounded-full transition-all duration-300" style="width:${Math.min(100, item.v * 100 * 4)}%"></div></div></div>`;
+    });
+}
+
+function resetFiltros() {
+    document.getElementById('fFacultad').value = 'TODAS';
+    sincronizarFacultad();
+    document.getElementById('fEstrato').value = 'TODOS';
+    document.getElementById('fRegla').value = 'act';
+    recalcularTablero();
+}
+
+// Descarga: solo datos anónimos (sin nombre, documento ni correo)
+function descargarCohorteCSV() {
+    let csv = "id_anonimo,programa,facultad,estrato,creditos,promedio,alerta_regla_actual,alerta_regla_nueva,desertor_2025_2,matriculado_2025_2\n";
+    DATA.rows.forEach(x => {
+        csv += `${x[0]},"${DATA.progs[x[1]]}","${DATA.facs[DATA.pf[x[1]]]}",${x[2]},${x[3]},${x[4] == null ? '' : x[4]},${x[5]},${x[6]},${x[7]},${1 - x[7]}\n`;
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' }));
+    a.download = 'cohorte_2025_1_anonimizada_1200.csv';
+    a.click();
+}
+
+window.onload = () => {
+    const fr = document.getElementById('pbiFrame'), img = document.getElementById('pbiImg'), nota = document.getElementById('pbiNota');
+    if (PBI_URL) { fr.src = PBI_URL; fr.classList.remove('hidden'); img.classList.add('hidden'); nota.textContent = 'Informe interactivo incrustado (enlace público, sin inicio de sesión).'; }
+    else { nota.textContent = 'Captura de pantalla del tablero desarrollado en Power BI Desktop, dado que actualmente no se cuenta con los permisos necesarios para su publicación.(el archivo *.pbix se entrega aparte). '; }
+    sincronizarFacultad();
+};
+</script>
+</body>
+</html>
